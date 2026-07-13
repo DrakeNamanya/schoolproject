@@ -1,0 +1,272 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Timbitwire Girls School · Management System</title>
+<link rel="stylesheet" href="timbitwire-tokens.css">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background: var(--paper); font-family: var(--font-sans); color: var(--fg-1); min-height: 100vh; }
+  svg { stroke-width: 1.75; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
+
+  .hero {
+    position: relative; overflow: hidden;
+    background: linear-gradient(135deg, var(--maroon-500) 0%, var(--brick-500) 60%, var(--maroon-600) 100%);
+    color: #fff; padding: 64px 32px 56px;
+  }
+  .hero::before {
+    content:""; position:absolute; top:0; left:0; right:0; height:5px;
+    background: linear-gradient(to right, #111 33%, #FCD116 33% 66%, #D21034 66%);
+  }
+  .hero::after {
+    content:""; position:absolute; right:-60px; bottom:-60px;
+    width: 360px; height: 360px;
+    background: url('assets/pattern-blocks.svg') center/240px;
+    opacity: .12; pointer-events: none;
+  }
+  .hero-inner { max-width: 1160px; margin: 0 auto; position: relative; }
+  .hero-brand { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+  .hero-brand img { width: 56px; height: 56px; filter: drop-shadow(0 4px 8px rgba(0,0,0,.25)); }
+  .hero-brand .n { font-family: var(--font-display); font-size: 22px; line-height: 1; }
+  .hero-brand .m { font-size: 10px; letter-spacing: .18em; opacity: .7; text-transform: uppercase; font-weight: 700; margin-top: 4px; }
+  .hero h1 {
+    font-family: var(--font-display); font-size: 56px; line-height: 1.02;
+    letter-spacing: -.015em; margin: 0 0 12px; font-weight: 400;
+    max-width: 780px;
+  }
+  .hero h1 em { color: #F5D2CD; font-style: italic; }
+  .hero p {
+    font-size: 16px; line-height: 1.55; opacity: .88;
+    max-width: 620px; margin: 0 0 22px;
+  }
+  .motto {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 8px 14px; background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.18); border-radius: 999px;
+    font-family: var(--font-display); font-style: italic; font-size: 14px;
+  }
+  .motto::before { content:""; width: 6px; height: 6px; background: #FCD116; border-radius: 999px; }
+
+  main { max-width: 1160px; margin: 0 auto; padding: 48px 32px 64px; }
+
+  .section-eyebrow {
+    font-size: 11px; text-transform: uppercase; letter-spacing: .14em;
+    color: var(--maroon-500); font-weight: 700; margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: var(--font-display); font-size: 32px; letter-spacing: -.01em;
+    margin: 0 0 6px; line-height: 1.1;
+  }
+  .section-desc { font-size: 14px; color: var(--fg-2); max-width: 640px; margin: 0 0 26px; }
+
+  .apps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .app-card {
+    display: block; text-decoration: none; color: inherit;
+    background: #fff; border: 1px solid var(--border-1); border-radius: 20px;
+    padding: 24px; box-shadow: var(--sh-1);
+    transition: transform 180ms var(--ease-out), box-shadow 180ms;
+    position: relative; overflow: hidden;
+  }
+  .app-card:hover { transform: translateY(-4px); box-shadow: var(--sh-3); }
+  .app-card .accent {
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  }
+  .app-card.brick .accent { background: var(--brick-500); }
+  .app-card.navy  .accent { background: var(--navy-500); }
+  .app-card.maroon .accent { background: var(--maroon-500); }
+  .app-card .role {
+    font-size: 10px; text-transform: uppercase; letter-spacing: .14em;
+    font-weight: 700; color: var(--fg-3);
+  }
+  .app-card h3 {
+    font-family: var(--font-display); font-size: 26px;
+    letter-spacing: -.005em; line-height: 1.1;
+    margin: 4px 0 10px;
+  }
+  .app-card p { font-size: 13px; color: var(--fg-2); line-height: 1.5; margin: 0 0 18px; }
+  .app-card .feats { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+  .app-card .feat {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--fg-1);
+  }
+  .app-card .feat svg { width: 14px; height: 14px; color: var(--brick-500); flex-shrink: 0; }
+  .app-card.navy .feat svg { color: var(--navy-500); }
+  .app-card.maroon .feat svg { color: var(--maroon-500); }
+  .app-card .open {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-weight: 700; font-size: 13px; color: var(--brick-600);
+  }
+  .app-card.navy .open { color: var(--navy-600); }
+  .app-card.maroon .open { color: var(--maroon-600); }
+  .app-card .open svg { width: 16px; height: 16px; transition: transform 180ms; }
+  .app-card:hover .open svg { transform: translateX(3px); }
+
+  /* Web routes deep-link grid */
+  .routes {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+    margin-top: 8px;
+  }
+  .r-link {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 14px; background: #fff; border: 1px solid var(--border-1);
+    border-radius: 10px; font-size: 13px; font-weight: 600; color: var(--fg-1);
+    text-decoration: none; transition: background 120ms, border-color 120ms;
+  }
+  .r-link:hover { background: var(--paper-2); border-color: var(--brick-300); }
+  .r-link svg { width: 16px; height: 16px; color: var(--maroon-500); flex-shrink: 0; }
+
+  .rule {
+    height: 1px; background: var(--paper-3); border: none;
+    margin: 48px 0;
+  }
+
+  /* Palette strip */
+  .palette { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 12px; }
+  .sw {
+    height: 88px; border-radius: 12px; padding: 12px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    color: #fff; font-size: 11px; font-weight: 600;
+    box-shadow: var(--sh-1);
+  }
+  .sw .hex { font-family: var(--font-mono); font-size: 10px; opacity: .82; font-weight: 500; }
+  .sw.light { color: var(--fg-1); border: 1px solid var(--border-1); }
+
+  footer {
+    background: var(--ink-800); color: rgba(255,255,255,.7);
+    padding: 32px; font-size: 12px; text-align: center;
+  }
+  footer b { color: #fff; }
+  footer .flag {
+    display: inline-block; height: 4px; width: 60px; margin-bottom: 10px;
+    background: linear-gradient(to right, #111 33%, #FCD116 33% 66%, #D21034 66%);
+    border-radius: 2px;
+  }
+
+  @media (max-width: 900px) {
+    .hero { padding: 44px 22px 40px; }
+    .hero h1 { font-size: 36px; }
+    main { padding: 32px 22px 60px; }
+    .apps { grid-template-columns: 1fr; }
+    .routes { grid-template-columns: repeat(2, 1fr); }
+    .palette { grid-template-columns: repeat(3, 1fr); }
+    .section-title { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-brand">
+      <img src="assets/timbitwire-crest.svg" alt="Timbitwire crest">
+      <div>
+        <div class="n">Timbitwire Girls School</div>
+        <div class="m">School Management System · Data Collectors Ltd</div>
+      </div>
+    </div>
+    <h1>One school. Three <em>apps.</em> Every module.</h1>
+    <p>An end-to-end operating system for Timbitwire: parents track fees, marks, clinic and menus from their phones; staff clock in automatically through GPS; administrators, finance, clinic, kitchen, procurement and stores work together on a single web console.</p>
+    <div class="motto">Do More To Become More</div>
+  </div>
+</section>
+
+<main>
+
+  <div class="section-eyebrow">Interactive prototypes</div>
+  <h2 class="section-title">Open each app</h2>
+  <p class="section-desc">Every screen below is clickable. All sidebar tabs on the web app and all bottom tabs on the mobile apps navigate to real designed views. State persists between visits.</p>
+
+  <div class="apps">
+
+    <a class="app-card brick" href="parent/">
+      <span class="accent"></span>
+      <div class="role">Parents · mobile</div>
+      <h3>Parent app</h3>
+      <p>What guardians see: their daughter's fees, marks, clinic history, feeding menu, events and documents — all on one screen.</p>
+      <div class="feats">
+        <div class="feat"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Fees statement + mobile-money payment</div>
+        <div class="feat"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Full Term 2 report card preview</div>
+        <div class="feat"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Clinic history with vitals + follow-ups</div>
+        <div class="feat"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Feeding menu, events, PDF documents</div>
+      </div>
+      <span class="open">Open parent app <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.75"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+
+    <a class="app-card navy" href="staff/">
+      <span class="accent"></span>
+      <div class="role">Staff · mobile</div>
+      <h3>Staff app</h3>
+      <p>Teachers and staff auto-clock-in the moment they cross the campus geofence. Schedule, timesheet and alerts always to hand.</p>
+      <div class="feats">
+        <div class="feat"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><b>Auto GPS check-in</b> when entering campus</div>
+        <div class="feat"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Live schedule with "NOW" marker</div>
+        <div class="feat"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Weekly timesheet + payroll cut-off</div>
+        <div class="feat"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Off-campus alerts + demo animation</div>
+      </div>
+      <span class="open">Open staff app <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.75"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+
+    <a class="app-card maroon" href="admin/">
+      <span class="accent"></span>
+      <div class="role">Administration · web</div>
+      <h3>Admin console</h3>
+      <p>The full back office: dashboard, finance, students, academics, attendance, clinic, kitchen, events, procurement, stores, reports, audit.</p>
+      <div class="feats">
+        <div class="feat"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>12 navigable modules, all designed</div>
+        <div class="feat"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Marks entry with 7-day auto-lock</div>
+        <div class="feat"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Live geofence map of every staff member</div>
+        <div class="feat"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>UNEB/EMIS-ready reports + audit log</div>
+      </div>
+      <span class="open">Open admin console <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.75"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+
+  </div>
+
+  <hr class="rule">
+
+  <div class="section-eyebrow">Web console · deep links</div>
+  <h2 class="section-title">Jump to any module</h2>
+  <p class="section-desc">Every sidebar destination on the admin console is a real designed screen. Open any of them directly:</p>
+
+  <div class="routes">
+    <a class="r-link" href="admin/?route=dashboard"><svg viewBox="0 0 24 24"><path d="M3 12 12 3l9 9"/><path d="M5 10v10h14V10"/></svg>Dashboard</a>
+    <a class="r-link" href="admin/?route=finance"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg>Finance</a>
+    <a class="r-link" href="admin/?route=students"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21c1-4 5-6 7-6s6 2 7 6"/><circle cx="17" cy="7" r="3"/></svg>Students</a>
+    <a class="r-link" href="admin/?route=academics"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 9h16"/></svg>Academics</a>
+
+    <a class="r-link" href="admin/?route=attendance"><svg viewBox="0 0 24 24"><path d="M12 22s-8-7.5-8-13a8 8 0 1 1 16 0c0 5.5-8 13-8 13Z"/><circle cx="12" cy="9" r="3"/></svg>Attendance & GPS</a>
+    <a class="r-link" href="admin/?route=clinic"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></svg>Clinic</a>
+    <a class="r-link" href="admin/?route=kitchen"><svg viewBox="0 0 24 24"><path d="M4 20V8L12 4l8 4v12"/><path d="M9 20v-6h6v6"/></svg>Kitchen</a>
+    <a class="r-link" href="admin/?route=events"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>Events</a>
+
+    <a class="r-link" href="admin/?route=procurement"><svg viewBox="0 0 24 24"><path d="M5 8l7-4 7 4v8l-7 4-7-4z"/><path d="M12 4v16"/></svg>Procurement</a>
+    <a class="r-link" href="admin/?route=stores"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4"/><rect x="5" y="8" width="14" height="12"/></svg>Stores</a>
+    <a class="r-link" href="admin/?route=reports"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>Reports</a>
+    <a class="r-link" href="admin/?route=audit"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>Audit log</a>
+  </div>
+
+  <hr class="rule">
+
+  <div class="section-eyebrow">Brand palette</div>
+  <h2 class="section-title">Colours applied throughout</h2>
+  <p class="section-desc">Pulled from the Timbitwire brand guidance — brick red as the hero, deep maroon as the institutional anchor, deep navy as the accent, charcoal + rose grey as the grounding neutrals.</p>
+
+  <div class="palette">
+    <div class="sw" style="background:#A5352C"><span>Brick Red · primary</span><span class="hex">#A5352C</span></div>
+    <div class="sw" style="background:#690427"><span>Deep Maroon · secondary</span><span class="hex">#690427</span></div>
+    <div class="sw" style="background:#1F2950"><span>Deep Navy · accent</span><span class="hex">#1F2950</span></div>
+    <div class="sw" style="background:#201D1D"><span>Charcoal · dark neutral</span><span class="hex">#201D1D</span></div>
+    <div class="sw light" style="background:#FFFFFF"><span>White · surface</span><span class="hex">#FFFFFF</span></div>
+    <div class="sw light" style="background:#E2D5D4"><span>Rose Grey · soft bg</span><span class="hex">#E2D5D4</span></div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="flag"></div>
+  <p><b>Timbitwire Girls School</b> · School Management System · designed by <b>Data Collectors Ltd</b> · 2026<br>
+  Do More To Become More · Uganda</p>
+</footer>
+</body>
+</html>

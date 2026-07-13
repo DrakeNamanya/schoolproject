@@ -1,0 +1,9 @@
+<!-- A thin strip echoing the Uganda flag colours. Used subtly on top of report cards & receipts. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 12" width="600" height="12" preserveAspectRatio="none">
+  <rect x="0"   y="0" width="100" height="12" fill="#111111"/>
+  <rect x="100" y="0" width="100" height="12" fill="#FCD116"/>
+  <rect x="200" y="0" width="100" height="12" fill="#D21034"/>
+  <rect x="300" y="0" width="100" height="12" fill="#111111"/>
+  <rect x="400" y="0" width="100" height="12" fill="#FCD116"/>
+  <rect x="500" y="0" width="100" height="12" fill="#D21034"/>
+</svg>

@@ -1,0 +1,22 @@
+# Cloudflare Pages / Netlify — response headers
+# Ensures browsers cache fonts + assets aggressively but always fetch a
+# fresh HTML shell so route + content updates land instantly.
+
+/*.ttf
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+/*.svg
+  Cache-Control: public, max-age=604800
+
+/*.css
+  Cache-Control: public, max-age=86400
+
+/*.js
+  Cache-Control: public, max-age=86400
+
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/
+  Cache-Control: public, max-age=0, must-revalidate

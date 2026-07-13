@@ -1,0 +1,317 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Timbitwire Girls School — Admin Console</title>
+<link rel="stylesheet" href="../timbitwire-tokens.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="routes.css">
+</head>
+<body>
+
+<div class="app">
+  <!-- =============== SIDEBAR =============== -->
+  <aside class="side" id="sidebar">
+    <div class="brand">
+      <img src="../assets/timbitwire-crest.svg" alt="Timbitwire crest">
+      <div>
+        <div class="name">Timbitwire</div>
+        <div class="school">Girls School · Admin</div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="lbl">Operations</div>
+      <a class="item" data-route="dashboard"><svg viewBox="0 0 24 24"><path d="M3 12 12 3l9 9"/><path d="M5 10v10h14V10"/></svg>Dashboard</a>
+      <a class="item" data-route="finance"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg>Finance<span class="b">12</span></a>
+      <a class="item" data-route="students"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21c1-4 5-6 7-6s6 2 7 6"/><circle cx="17" cy="7" r="3"/></svg>Students</a>
+      <a class="item" data-route="academics"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 9h16"/></svg>Academics</a>
+      <a class="item" data-route="attendance"><svg viewBox="0 0 24 24"><path d="M12 22s-8-7.5-8-13a8 8 0 1 1 16 0c0 5.5-8 13-8 13Z"/><circle cx="12" cy="9" r="3"/></svg>Attendance</a>
+    </div>
+
+    <div class="group">
+      <div class="lbl">Services</div>
+      <a class="item" data-route="clinic"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></svg>Clinic</a>
+      <a class="item" data-route="kitchen"><svg viewBox="0 0 24 24"><path d="M4 20V8L12 4l8 4v12"/><path d="M9 20v-6h6v6"/></svg>Kitchen</a>
+      <a class="item" data-route="events"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>Events</a>
+      <a class="item" data-route="procurement"><svg viewBox="0 0 24 24"><path d="M5 8l7-4 7 4v8l-7 4-7-4z"/><path d="M12 4v16"/></svg>Procurement<span class="b">3</span></a>
+      <a class="item" data-route="stores"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4"/><rect x="5" y="8" width="14" height="12"/></svg>Stores</a>
+    </div>
+
+    <div class="group">
+      <div class="lbl">Insight</div>
+      <a class="item" data-route="reports"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>Reports</a>
+      <a class="item" data-route="audit"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>Audit log</a>
+    </div>
+
+    <div class="motto">Do More To Become More</div>
+
+    <div class="user">
+      <div class="av">JN</div>
+      <div>
+        <div class="n">J. Nsubuga</div>
+        <div class="r">Bursar · Finance</div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="side-scrim" id="scrim"></div>
+
+  <!-- =============== MAIN =============== -->
+  <main class="main">
+
+    <div class="topbar">
+      <div class="menu-btn" id="menuBtn"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></div>
+      <div class="breadcrumbs"><span id="crumb1">Overview</span> &nbsp;›&nbsp; <b id="crumb2">Dashboard</b></div>
+      <div class="term"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4"/></svg>Term 2 · 2026 <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></div>
+      <div class="search">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input placeholder="Search students, staff, receipts…"/>
+      </div>
+      <div class="icon-btn" title="Notifications"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg></div>
+      <div class="icon-btn" title="Print"><svg viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><rect x="6" y="14" width="12" height="7"/><rect x="3" y="9" width="18" height="8" rx="1"/></svg></div>
+    </div>
+
+    <div class="canvas" id="canvas">
+      <!-- routes injected here -->
+    </div>
+  </main>
+</div>
+
+<!-- All screen content lives in these template blocks. Router shows/hides them. -->
+<div id="routeSource" hidden>
+
+<!-- ============================================================
+     ROUTE: dashboard  — Director/HT overview
+     ============================================================ -->
+<template data-route="dashboard" data-crumb="Operations · Dashboard" data-title="Overview">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Timbitwire Girls School · Term 2 · 2026</div>
+      <h1>School <em>overview</em></h1>
+      <div class="desc">Live snapshot across finance, attendance, academics, clinic, and operations. As of Wednesday 09 Jul 2026, 14:02 EAT.</div>
+    </div>
+    <div class="actions">
+      <button class="btn o"><svg viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><rect x="6" y="14" width="12" height="7"/></svg>Print daily brief</button>
+      <button class="btn p"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Post announcement</button>
+    </div>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi">
+      <div class="k">Enrolment</div>
+      <div class="v">812<small>learners</small></div>
+      <div class="trend"><svg viewBox="0 0 24 24"><path d="m6 15 6-6 6 6"/></svg>+18 this term</div>
+    </div>
+    <div class="kpi">
+      <div class="k">Fees collected</div>
+      <div class="v">UGX 342<small>M of 428M</small></div>
+      <div class="bar"><div class="fill" style="width:80%"></div></div>
+      <div class="bar-l"><span>80% · Term 2</span><span>Target 24 Jul</span></div>
+    </div>
+    <div class="kpi">
+      <div class="k">Staff on-campus</div>
+      <div class="v">54<small>/ 61</small></div>
+      <div class="bar"><div class="fill navy" style="width:88%"></div></div>
+      <div class="bar-l"><span>88% checked in</span><span>7 off duty</span></div>
+    </div>
+    <div class="kpi">
+      <div class="k">Clinic visits today</div>
+      <div class="v">12</div>
+      <div class="trend down"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>−3 vs yesterday</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="hd"><h3>This week at Timbitwire</h3><div class="m"><a>Full calendar →</a></div></div>
+      <div class="body">
+        <div class="timeline">
+          <div class="ev today">
+            <div class="ev-time"><b>Wed 09 Jul</b><span>Today</span></div>
+            <div class="ev-body">
+              <div class="ev-t">Mid-term marks entry deadline</div>
+              <div class="ev-s">All subject teachers to submit by 22:00 · Academics.</div>
+              <span class="tag due" style="margin-top:8px;"><span class="dot"></span>3 subjects outstanding</span>
+            </div>
+          </div>
+          <div class="ev">
+            <div class="ev-time"><b>Thu 10 Jul</b><span>Tomorrow</span></div>
+            <div class="ev-body">
+              <div class="ev-t">S4 mock paper 1 · Mathematics</div>
+              <div class="ev-s">Main hall · 08:30–11:00 · 148 candidates.</div>
+            </div>
+          </div>
+          <div class="ev">
+            <div class="ev-time"><b>Sat 12 Jul</b><span>MDD final</span></div>
+            <div class="ev-body">
+              <div class="ev-t">Inter-house MDD competition</div>
+              <div class="ev-s">Green vs Blue vs Red vs White · School assembly hall.</div>
+            </div>
+          </div>
+          <div class="ev">
+            <div class="ev-time"><b>Sun 27 Jul</b><span>Visitation</span></div>
+            <div class="ev-body">
+              <div class="ev-t">Term 2 Visitation Day</div>
+              <div class="ev-s">Boarding parents 10:00–14:00. Day scholars not required.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="hd"><h3>Alerts</h3><div class="m"><a>All alerts →</a></div></div>
+      <div class="body body-tight">
+        <div class="alert danger">
+          <svg viewBox="0 0 24 24"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17h.01"/></svg>
+          <div><div class="alert-t">DOS office · off-campus</div><div class="alert-s">Ms. Nabbosa J. flagged 420 m off during 09:45 lesson.</div></div>
+        </div>
+        <div class="alert warn">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4"/><rect x="5" y="8" width="14" height="12"/></svg>
+          <div><div class="alert-t">Stores · reorder</div><div class="alert-s">Exercise books stock at 12 dozen (below 20).</div></div>
+        </div>
+        <div class="alert info">
+          <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg>
+          <div><div class="alert-t">Finance · new payments</div><div class="alert-s">UGX 6.2M received today across 41 receipts.</div></div>
+        </div>
+        <div class="alert ok">
+          <svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>
+          <div><div class="alert-t">Requisition #REQ-0346 approved</div><div class="alert-s">Kitchen · 200 kg maize flour · UGX 480,000.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+
+<!-- ============================================================
+     ROUTE: finance
+     ============================================================ -->
+<template data-route="finance" data-crumb="Finance · Overview" data-title="Fees collection">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Finance · Term 2 · 2026</div>
+      <h1>Fees <em>collection</em></h1>
+      <div class="desc">UGX 428M invoiced across 812 learners. Reconciliation as of 09 Jul 14:02 EAT.</div>
+    </div>
+    <div class="actions">
+      <button class="btn o"><svg viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><rect x="6" y="14" width="12" height="7"/></svg>Print term report</button>
+      <button class="btn s"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Export EMIS</button>
+      <button class="btn p"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Post payment</button>
+    </div>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="k">Collected · Term 2</div>
+      <svg class="spark" viewBox="0 0 60 24"><polyline points="0,20 10,18 20,12 30,14 40,8 50,6 60,4" stroke="var(--brick-500)" fill="none"/></svg>
+      <div class="v">UGX <span style="font-size:26px">342M</span><small>/ 428M</small></div>
+      <div class="bar"><div class="fill" style="width:80%"></div></div>
+      <div class="bar-l"><span>80%</span><span>Target 92% by 24 Jul</span></div>
+    </div>
+    <div class="kpi"><div class="k">In arrears</div>
+      <svg class="spark" viewBox="0 0 60 24"><polyline points="0,4 10,8 20,6 30,14 40,12 50,18 60,20" stroke="var(--maroon-500)" fill="none"/></svg>
+      <div class="v" style="color:var(--brick-600)">184<small>learners</small></div>
+      <div class="bar"><div class="fill maroon" style="width:23%"></div></div>
+      <div class="bar-l"><span>UGX 86M outstanding</span><span>23% of roll</span></div>
+    </div>
+    <div class="kpi"><div class="k">Today · payments</div>
+      <div class="v">UGX <span style="font-size:26px">6.2M</span></div>
+      <div class="trend"><svg viewBox="0 0 24 24"><path d="m6 15 6-6 6 6"/></svg>18% vs yesterday</div>
+    </div>
+    <div class="kpi"><div class="k">Mobile money share</div>
+      <div class="v">72<small>%</small></div>
+      <div class="bar"><div class="fill navy" style="width:72%"></div></div>
+      <div class="bar-l"><span>MTN 51% · Airtel 21%</span><span>Bank 28%</span></div>
+    </div>
+  </div>
+
+  <div class="two-col" style="margin-bottom:24px;">
+    <div class="card">
+      <div class="hd"><h3>Daily collection · Term 2</h3><div class="m"><span style="font-family:var(--font-mono)">05 Jul → 09 Jul</span><a>Breakdown →</a></div></div>
+      <div class="body">
+        <div class="chart">
+          <div class="chart-grid"><div>15M</div><div>10M</div><div>5M</div><div>0</div></div>
+          <div class="bars">
+            <div class="col"><div class="stack"><div class="p" style="height:56px"></div><div class="a" style="height:32px"></div></div><div class="x">Mon</div></div>
+            <div class="col"><div class="stack"><div class="p" style="height:88px"></div><div class="a" style="height:26px"></div></div><div class="x">Tue</div></div>
+            <div class="col"><div class="stack"><div class="p" style="height:70px"></div><div class="a" style="height:35px"></div></div><div class="x">Wed</div></div>
+            <div class="col"><div class="stack"><div class="p" style="height:106px"></div><div class="a" style="height:22px"></div></div><div class="x">Thu</div></div>
+            <div class="col"><div class="stack"><div class="p" style="height:125px"></div><div class="a" style="height:29px"></div></div><div class="x">Fri</div></div>
+            <div class="col"><div class="stack"><div class="p" style="height:35px"></div><div class="a" style="height:13px"></div></div><div class="x">Sat</div></div>
+            <div class="col"><div class="stack"><div class="p" style="height:64px"></div><div class="a" style="height:19px"></div></div><div class="x">Mon</div></div>
+            <div class="col"><div class="stack"><div class="p" style="height:90px"></div><div class="a" style="height:32px"></div></div><div class="x">Tue</div></div>
+            <div class="col"><div class="stack"><div class="p" style="height:106px"></div><div class="a" style="height:38px"></div></div><div class="x">Wed</div></div>
+            <div class="col"><div class="stack"><div class="p" style="height:58px"></div><div class="a" style="height:35px"></div></div><div class="x">Thu</div></div>
+          </div>
+        </div>
+        <div class="legend">
+          <span><span class="dot" style="background:var(--brick-500)"></span>Tuition</span>
+          <span><span class="dot" style="background:var(--navy-500)"></span>Boarding & extras</span>
+          <span style="margin-left:auto;font-family:var(--font-mono);color:var(--fg-3);">10-day window</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="hd"><h3>Requisitions</h3><div class="m"><a>Director inbox →</a></div></div>
+      <div class="body body-tight">
+        <div class="req"><div class="ic" style="background:var(--warning-bg);color:#7a5111"><svg viewBox="0 0 24 24"><path d="M12 3v18M8 6h4a3 3 0 1 1 0 6H8"/></svg></div>
+          <div><div class="t">Lab reagents · Chemistry</div><div class="s">REQ-0347 · L. Ochieng · 08 Jul</div></div>
+          <div class="a"><span class="amt">UGX 1,240,000</span><span class="pill pending">Pending</span></div>
+        </div>
+        <div class="req"><div class="ic" style="background:var(--info-bg);color:var(--navy-600)"><svg viewBox="0 0 24 24"><path d="M4 20V8L12 4l8 4v12"/></svg></div>
+          <div><div class="t">Kitchen · 200 kg maize flour</div><div class="s">REQ-0346 · Cook M. Nakku · 08 Jul</div></div>
+          <div class="a"><span class="amt">UGX 480,000</span><span class="pill approved">Approved</span></div>
+        </div>
+        <div class="req"><div class="ic" style="background:var(--paper-2);color:var(--fg-2)"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4"/><rect x="5" y="8" width="14" height="12"/></svg></div>
+          <div><div class="t">Stores · 12 dozen exercise books</div><div class="s">REQ-0345 · Stores officer · 07 Jul</div></div>
+          <div class="a"><span class="amt">UGX 216,000</span><span class="pill approved">Approved</span></div>
+        </div>
+        <div class="req"><div class="ic" style="background:var(--danger-bg);color:var(--brick-600)"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg></div>
+          <div><div class="t">Sports uniform batch</div><div class="s">REQ-0343 · MDD dept · 07 Jul</div></div>
+          <div class="a"><span class="amt">UGX 2,860,000</span><span class="pill rejected">Over budget</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="tab-hd">
+      <h3>Students · outstanding balances</h3>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <button class="btn o sm"><svg viewBox="0 0 24 24"><path d="M4 6h16M6 12h12M8 18h8"/></svg>Filters</button>
+        <button class="btn p sm">Send SMS reminders</button>
+      </div>
+    </div>
+    <div class="tabs">
+      <div class="t on">Arrears (184)</div><div class="t">Partial (231)</div><div class="t">Cleared (397)</div><div class="t">All (812)</div>
+    </div>
+    <div class="filter-bar">
+      <span class="chip on">S1–S4</span><span class="chip">S5–S6</span><span class="chip">Boarding</span><span class="chip">Day scholars</span><span class="chip">Green House</span>
+      <span class="r"><span style="font-family:var(--font-mono);">184 rows</span> · by balance</span>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="tbl">
+        <thead><tr><th>Student</th><th>Class</th><th>Admission no.</th><th>Guardian</th><th class="num">Balance</th><th class="num">Overdue</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><div style="display:flex;align-items:center;gap:10px"><div class="avatar">NA</div><div><div style="font-weight:600;">Nakato Aisha</div><div style="font-size:11px;color:var(--fg-3);font-family:var(--font-mono)">S2 East</div></div></div></td><td>S2 East</td><td class="num">TGS/2024/00478</td><td>Mukisa J. · +256 772 894 001</td><td class="num" style="color:var(--brick-600);font-weight:600">450,000</td><td class="num">14 d</td><td><span class="tag due"><span class="dot"></span>Arrears</span></td></tr>
+          <tr><td><div style="display:flex;align-items:center;gap:10px"><div class="avatar m">OK</div><div><div style="font-weight:600;">Okello Kevin</div><div style="font-size:11px;color:var(--fg-3);font-family:var(--font-mono)">S3 West</div></div></div></td><td>S3 West</td><td class="num">TGS/2023/00219</td><td>Okello P. · +256 703 552 118</td><td class="num" style="color:var(--brick-600);font-weight:600">920,000</td><td class="num">21 d</td><td><span class="tag due"><span class="dot"></span>Arrears</span></td></tr>
+          <tr><td><div style="display:flex;align-items:center;gap:10px"><div class="avatar">TB</div><div><div style="font-weight:600;">Tumusiime Brenda</div><div style="font-size:11px;color:var(--fg-3);font-family:var(--font-mono)">S1 North</div></div></div></td><td>S1 North</td><td class="num">TGS/2025/00612</td><td>Kabahenda R. · +256 774 003 902</td><td class="num" style="color:#7a5111;font-weight:600">120,000</td><td class="num">6 d</td><td><span class="tag part"><span class="dot"></span>Partial</span></td></tr>
+          <tr><td><div style="display:flex;align-items:center;gap:10px"><div class="avatar m">SM</div><div><div style="font-weight:600;">Ssekabira Moses</div><div style="font-size:11px;color:var(--fg-3);font-family:var(--font-mono)">S4 East</div></div></div></td><td>S4 East</td><td class="num">TGS/2022/00087</td><td>Ssekabira D. · +256 702 812 660</td><td class="num" style="color:var(--brick-600);font-weight:600">1,340,000</td><td class="num">28 d</td><td><span class="tag due"><span class="dot"></span>Arrears</span></td></tr>
+          <tr><td><div style="display:flex;align-items:center;gap:10px"><div class="avatar">NA</div><div><div style="font-weight:600;">Namuli Angel</div><div style="font-size:11px;color:var(--fg-3);font-family:var(--font-mono)">S2 South</div></div></div></td><td>S2 South</td><td class="num">TGS/2024/00521</td><td>Namuli S. · +256 776 118 040</td><td class="num" style="color:var(--brick-600);font-weight:600">385,000</td><td class="num">9 d</td><td><span class="tag due"><span class="dot"></span>Arrears</span></td></tr>
+          <tr><td><div style="display:flex;align-items:center;gap:10px"><div class="avatar m">BW</div><div><div style="font-weight:600;">Byaruhanga W.</div><div style="font-size:11px;color:var(--fg-3);font-family:var(--font-mono)">S6 A</div></div></div></td><td>S6 A</td><td class="num">TGS/2021/00013</td><td>Byaruhanga E. · +256 772 041 883</td><td class="num" style="color:#7a5111;font-weight:600">90,000</td><td class="num">3 d</td><td><span class="tag part"><span class="dot"></span>Partial</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
+
+</div>
+
+<!-- routes-2.js registers window.__extraRoutes; router.js reads it. Order matters. -->
+<script src="routes-2.js"></script>
+<script src="router.js"></script>
+</body>
+</html>

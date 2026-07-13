@@ -1,0 +1,281 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Timbitwire · Staff app</title>
+<link rel="stylesheet" href="../timbitwire-tokens.css">
+<link rel="stylesheet" href="staff.css">
+</head>
+<body>
+
+<div class="stage">
+  <div class="device">
+    <div class="screen">
+      <div class="cam"></div>
+      <div class="status">
+        <span>07:38</span>
+        <span class="signal">4G ▲▼ · 84%</span>
+      </div>
+
+      <!-- =============== CHECK-IN =============== -->
+      <section class="route active" data-route="checkin">
+        <div class="head">
+          <div class="brand">
+            <img src="../assets/timbitwire-crest.svg" alt="TGS">
+            <div>
+              <div class="brand-n">Timbitwire</div>
+              <div class="brand-r">STAFF · PHYSICS</div>
+            </div>
+          </div>
+          <div class="menu-dot"><svg viewBox="0 0 24 24" width="18" height="18" stroke="var(--fg-1)" fill="none" stroke-width="1.75"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg></div>
+        </div>
+
+        <div class="userbar">
+          <div class="av">B</div>
+          <div>
+            <h1>Mr. Ssekandi B.</h1>
+            <div class="sub">STAFF/2021/041 · Day duty · 07:30–17:00</div>
+          </div>
+        </div>
+
+        <div class="map">
+          <div class="geofence"></div>
+          <div class="pulse"></div>
+          <div class="fence-label"><span class="d"></span><span id="fenceLbl">Inside campus geofence</span></div>
+          <div class="accuracy">±6 m · GPS + Cell</div>
+          <div class="pin" id="pin"></div>
+        </div>
+
+        <div class="ci is-inside" id="ciCard">
+          <div class="ci-head">
+            <div>
+              <div class="ci-eyebrow" id="ciEyebrow">Auto check-in</div>
+              <div class="ci-time" id="ciTime">07:38<small>EAT</small></div>
+              <div class="ci-date">09 Jul 2026 · <span id="ciStatus" class="status-inline ok"><svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" fill="none" stroke-width="2"><path d="M5 12l5 5L20 7"/></svg> Auto-checked in via geofence</span></div>
+            </div>
+            <div class="auto-toggle" title="Auto-check-in on entry">
+              <div class="toggle-lbl">Auto GPS</div>
+              <div class="toggle on"><div class="dot"></div></div>
+            </div>
+          </div>
+
+          <div class="ci-foot">
+            <div><span class="k">Scheduled</span><span class="v">07:30</span></div>
+            <div><span class="k">Grace</span><span class="v">15 min</span></div>
+            <div><span class="k">Status</span><span class="v" id="ciDelta" style="color:var(--success)">On duty</span></div>
+          </div>
+
+          <button class="demo-btn" id="demoBtn">
+            <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="1.75"><path d="M8 5v14l11-7z"/></svg>
+            Demo: leave & re-enter geofence
+          </button>
+        </div>
+
+        <div class="body-scroll">
+          <h3 class="sec-title underline-brand">Today's log</h3>
+          <div class="log">
+            <div class="log-item">
+              <div class="log-ic ok"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="1.75"><path d="M5 12l5 5L20 7"/></svg></div>
+              <div class="log-body"><div class="log-t">Auto check-in via geofence</div><div class="log-s">Kampala campus · ±6 m accuracy</div></div>
+              <div class="log-time">07:38</div>
+            </div>
+            <div class="log-item">
+              <div class="log-ic info"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="1.75"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg></div>
+              <div class="log-body"><div class="log-t">Class started · Physics S3 West</div><div class="log-s">Lab 2 · 34 girls</div></div>
+              <div class="log-time">07:30</div>
+            </div>
+          </div>
+          <div class="foot-space"></div>
+        </div>
+      </section>
+
+      <!-- =============== SCHEDULE =============== -->
+      <section class="route" data-route="schedule">
+        <div class="top-title">
+          <h1>Schedule</h1>
+          <div class="term-badge">Week 5 · Term 2</div>
+        </div>
+        <div class="weekbar">
+          <div class="day"><span>M</span><span class="n">07</span></div>
+          <div class="day"><span>T</span><span class="n">08</span></div>
+          <div class="day on"><span>W</span><span class="n">09</span></div>
+          <div class="day"><span>T</span><span class="n">10</span></div>
+          <div class="day"><span>F</span><span class="n">11</span></div>
+        </div>
+        <div class="body-scroll">
+          <div class="slot done"><div class="slot-t">07:30<small>08:15</small></div><div class="slot-info"><div class="slot-s">Physics · S3 West</div><div class="slot-r">Lab 2 · 34 girls</div></div></div>
+          <div class="slot done"><div class="slot-t">08:15<small>09:00</small></div><div class="slot-info"><div class="slot-s">Physics · S3 East</div><div class="slot-r">Lab 2 · 32 girls</div></div></div>
+          <div class="slot now"><div class="slot-t">09:00<small>09:45</small></div><div class="slot-info"><div class="slot-s">Math · S2 East</div><div class="slot-r">Room 14 · 38 girls</div></div></div>
+          <div class="slot"><div class="slot-t">10:00<small>10:45</small></div><div class="slot-info"><div class="slot-s">Break duty</div><div class="slot-r">Green quadrant</div></div></div>
+          <div class="slot"><div class="slot-t">11:30<small>12:15</small></div><div class="slot-info"><div class="slot-s">Math · S2 North</div><div class="slot-r">Room 08 · 36 girls</div></div></div>
+          <div class="slot"><div class="slot-t">14:00<small>15:00</small></div><div class="slot-info"><div class="slot-s">Physics · S3 East (double)</div><div class="slot-r">Lab 2 · 32 girls</div></div></div>
+          <div class="slot"><div class="slot-t">15:45<small>17:00</small></div><div class="slot-info"><div class="slot-s">Prep · S4 mock revision</div><div class="slot-r">Library</div></div></div>
+          <div class="foot-space"></div>
+        </div>
+      </section>
+
+      <!-- =============== TIMESHEET =============== -->
+      <section class="route" data-route="timesheet">
+        <div class="top-title">
+          <h1>Timesheet</h1>
+          <div class="term-badge">Week 5 · Term 2</div>
+        </div>
+
+        <div class="ts-hero">
+          <div class="ts-strip"></div>
+          <div class="ts-eyebrow">Total logged this week</div>
+          <div class="ts-total tabular">32 h <span>18 m</span></div>
+          <div class="ts-target">Target 40 h · <b>7 h 42 m</b> remaining · cut-off Fri 22:00</div>
+          <div class="ts-bar"><div class="ts-fill" style="width:80%"></div></div>
+        </div>
+
+        <div class="body-scroll">
+          <h3 class="sec-title underline-brand">This week</h3>
+          <div class="ts-list">
+            <div class="ts-row"><div class="ts-day"><b>Mon 07</b>Full day</div><div class="ts-times"><span>07:32</span><span>17:04</span></div><div class="ts-hrs">9 h 32 m</div></div>
+            <div class="ts-row"><div class="ts-day"><b>Tue 08</b>Full day</div><div class="ts-times"><span>07:29</span><span>16:58</span></div><div class="ts-hrs">9 h 29 m</div></div>
+            <div class="ts-row today"><div class="ts-day"><b>Wed 09</b>In progress</div><div class="ts-times"><span>07:38</span><span>—</span></div><div class="ts-hrs">6 h 24 m</div></div>
+            <div class="ts-row"><div class="ts-day"><b>Thu 10</b>Scheduled</div><div class="ts-times"><span>—</span><span>—</span></div><div class="ts-hrs" style="color:var(--fg-3)">—</div></div>
+            <div class="ts-row"><div class="ts-day"><b>Fri 11</b>Scheduled</div><div class="ts-times"><span>—</span><span>—</span></div><div class="ts-hrs" style="color:var(--fg-3)">—</div></div>
+          </div>
+
+          <h3 class="sec-title underline-brand">Historical</h3>
+          <div class="ts-list">
+            <div class="ts-row"><div class="ts-day"><b>Week 4</b>30 Jun–04 Jul</div><div class="ts-hrs">41 h 08 m</div></div>
+            <div class="ts-row"><div class="ts-day"><b>Week 3</b>23–27 Jun</div><div class="ts-hrs">40 h 02 m</div></div>
+            <div class="ts-row"><div class="ts-day"><b>Week 2</b>16–20 Jun</div><div class="ts-hrs">39 h 44 m</div></div>
+          </div>
+
+          <div class="foot-space"></div>
+        </div>
+      </section>
+
+      <!-- =============== ALERTS =============== -->
+      <section class="route" data-route="alerts">
+        <div class="top-title">
+          <h1>Alerts</h1>
+          <div class="term-badge">Unread · 4</div>
+        </div>
+
+        <div class="body-scroll">
+          <div class="day-sep">Today · 09 Jul</div>
+          <div class="notif unread danger">
+            <div class="ic"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="1.75"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17h.01"/></svg></div>
+            <div class="body-in"><div class="n-t">Off-campus during class hours</div><div class="n-s">Ms. Nabbosa J. flagged 420 m from campus during her 09:45 lesson. Please review.</div><div class="n-tm">14:00 · DOS office</div></div>
+          </div>
+          <div class="notif unread warn">
+            <div class="ic"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="1.75"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></svg></div>
+            <div class="body-in"><div class="n-t">Marks entry window closes in 12 h</div><div class="n-s">Physics S3 East mid-term marks are due by 10 Jul 02:00.</div><div class="n-tm">13:15 · Academics</div></div>
+          </div>
+          <div class="notif success">
+            <div class="ic"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="1.75"><path d="M5 12l5 5L20 7"/></svg></div>
+            <div class="body-in"><div class="n-t">Auto check-in accepted</div><div class="n-s">07:38 · Inside campus geofence, ±6 m.</div><div class="n-tm">07:38 · System</div></div>
+          </div>
+          <div class="notif info">
+            <div class="ic"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="1.75"><path d="M12 3 2 8l10 5 10-5-10-5z"/><path d="M2 14l10 5 10-5"/></svg></div>
+            <div class="body-in"><div class="n-t">Requisition #REQ-0341 approved</div><div class="n-s">Lab consumables · UGX 480,000 · Director signed off.</div><div class="n-tm">16:22 · Procurement</div></div>
+          </div>
+
+          <div class="day-sep">Yesterday · 08 Jul</div>
+          <div class="notif success">
+            <div class="ic"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="1.75"><path d="M5 12l5 5L20 7"/></svg></div>
+            <div class="body-in"><div class="n-t">Auto check-out at 17:04</div><div class="n-s">Departed geofence · full day 9 h 32 m recorded.</div><div class="n-tm">17:04 · System</div></div>
+          </div>
+          <div class="notif info">
+            <div class="ic"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="1.75"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg></div>
+            <div class="body-in"><div class="n-t">Staff PTA meeting notes</div><div class="n-s">Term 2 Visitation Day briefing shared by headteacher.</div><div class="n-tm">16:00 · Communications</div></div>
+          </div>
+
+          <div class="foot-space"></div>
+        </div>
+      </section>
+
+      <nav class="tabs">
+        <a class="tab active" data-goto="checkin"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.75"><path d="M12 22s-8-7.5-8-13a8 8 0 1 1 16 0c0 5.5-8 13-8 13Z"/><circle cx="12" cy="9" r="3"/></svg>Check-in</a>
+        <a class="tab" data-goto="schedule"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.75"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>Schedule</a>
+        <a class="tab" data-goto="timesheet"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.75"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>Timesheet</a>
+        <a class="tab" data-goto="alerts"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.75"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>Alerts</a>
+      </nav>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const routes = document.querySelectorAll('.route');
+  const tabs = document.querySelectorAll('.tab');
+  function nav(name) {
+    routes.forEach(r => r.classList.toggle('active', r.dataset.route === name));
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.goto === name));
+    localStorage.setItem('tgs_staff_route', name);
+  }
+  document.querySelectorAll('[data-goto]').forEach(el => {
+    el.addEventListener('click', e => { e.preventDefault(); nav(el.dataset.goto); });
+  });
+  const stored = localStorage.getItem('tgs_staff_route');
+  if (stored) nav(stored);
+
+  // Auto-GPS demo animation
+  const pin = document.getElementById('pin');
+  const btn = document.getElementById('demoBtn');
+  const eyebrow = document.getElementById('ciEyebrow');
+  const time = document.getElementById('ciTime');
+  const statusInline = document.getElementById('ciStatus');
+  const delta = document.getElementById('ciDelta');
+  const fenceLbl = document.getElementById('fenceLbl');
+  const ciCard = document.getElementById('ciCard');
+
+  function setState(state) {
+    if (state === 'inside') {
+      ciCard.classList.remove('is-outside');
+      ciCard.classList.add('is-inside');
+      eyebrow.textContent = 'Auto check-in';
+      statusInline.className = 'status-inline ok';
+      statusInline.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" fill="none" stroke-width="2"><path d="M5 12l5 5L20 7"/></svg> Auto-checked in via geofence';
+      fenceLbl.textContent = 'Inside campus geofence';
+      delta.textContent = 'On duty'; delta.style.color = 'var(--success)';
+    } else if (state === 'leaving') {
+      eyebrow.textContent = 'Leaving geofence…';
+      statusInline.className = 'status-inline warn';
+      statusInline.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg> Detecting exit';
+      fenceLbl.textContent = 'Exiting geofence';
+      delta.textContent = 'Watching'; delta.style.color = '#7a5111';
+    } else if (state === 'outside') {
+      ciCard.classList.remove('is-inside');
+      ciCard.classList.add('is-outside');
+      eyebrow.textContent = 'Auto check-out';
+      statusInline.className = 'status-inline danger';
+      statusInline.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" fill="none" stroke-width="2"><path d="M12 3 2 20h20L12 3z"/></svg> Auto-checked out at 09:52';
+      fenceLbl.textContent = 'Outside geofence';
+      delta.textContent = 'Off-campus'; delta.style.color = 'var(--brick-500)';
+    } else if (state === 'reentering') {
+      eyebrow.textContent = 'Re-entering campus…';
+      statusInline.className = 'status-inline warn';
+      statusInline.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg> Verifying position';
+      fenceLbl.textContent = 'Approaching geofence';
+      delta.textContent = 'Resuming'; delta.style.color = '#7a5111';
+    }
+  }
+
+  btn.addEventListener('click', () => {
+    if (btn.dataset.running === '1') return;
+    btn.dataset.running = '1'; btn.disabled = true; btn.style.opacity = '.5';
+    pin.style.transition = 'left 1.6s ease-in-out, top 1.6s ease-in-out';
+    setState('leaving');
+    setTimeout(() => { pin.style.left = '82%'; pin.style.top = '18%'; }, 100);
+    setTimeout(() => setState('outside'), 1800);
+    setTimeout(() => { setState('reentering'); pin.style.left = '48%'; pin.style.top = '48%'; }, 3200);
+    setTimeout(() => {
+      setState('inside');
+      time.innerHTML = '09:57<small>EAT</small>';
+      pin.style.left = '38%'; pin.style.top = '52%';
+      btn.disabled = false; btn.style.opacity = '1';
+      btn.dataset.running = '0';
+    }, 4900);
+  });
+})();
+</script>
+</body>
+</html>

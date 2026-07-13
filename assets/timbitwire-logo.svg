@@ -1,0 +1,40 @@
+<!-- Timbitwire Girls School — placeholder crest.
+     Shield silhouette in Brick Red with Deep Maroon inner field.
+     Open-book icon (education), 3 stars above (aspiration).
+     Motto ribbon in Deep Navy. Flag for replacement with real crest.  -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 96" width="320" height="96">
+  <!-- Crest -->
+  <g transform="translate(4,4)">
+    <path d="M4 6 L84 6 L84 46 Q84 66 44 82 Q4 66 4 46 Z"
+          fill="#A5352C" stroke="#690427" stroke-width="1.5"/>
+    <path d="M12 14 L76 14 L76 44 Q76 60 44 74 Q12 60 12 44 Z"
+          fill="#690427"/>
+    <!-- Stars -->
+    <g fill="#F7EFEC">
+      <circle cx="26" cy="24" r="2"/>
+      <circle cx="44" cy="22" r="2.6"/>
+      <circle cx="62" cy="24" r="2"/>
+    </g>
+    <!-- Open book -->
+    <g fill="none" stroke="#F7EFEC" stroke-width="2" stroke-linejoin="round">
+      <path d="M20 42 L44 38 L68 42 L68 60 L44 56 L20 60 Z"/>
+      <path d="M44 38 L44 56"/>
+      <path d="M28 46 L38 45"/>
+      <path d="M50 45 L60 46"/>
+      <path d="M28 51 L38 50"/>
+      <path d="M50 50 L60 51"/>
+    </g>
+    <!-- Ribbon banner -->
+    <path d="M0 66 L88 66 L84 78 L4 78 Z" fill="#1F2950"/>
+    <text x="44" y="75" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif"
+          font-size="7" font-weight="800" fill="#F7EFEC" letter-spacing="1.2">TGS · EST. 1988</text>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="104" y="42" font-family="'DM Serif Display', Georgia, serif" font-size="26"
+        fill="#201D1D" letter-spacing="-0.3">Timbitwire</text>
+  <text x="104" y="62" font-family="'DM Serif Display', Georgia, serif" font-size="14"
+        fill="#A5352C" font-style="italic">Girls School</text>
+  <text x="104" y="80" font-family="'Plus Jakarta Sans', sans-serif" font-size="9"
+        font-weight="700" fill="#690427" letter-spacing="2.2">DO MORE TO BECOME MORE</text>
+</svg>

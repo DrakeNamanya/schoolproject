@@ -1,0 +1,369 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Timbitwire · Parent app</title>
+<link rel="stylesheet" href="../timbitwire-tokens.css">
+<link rel="stylesheet" href="parent.css">
+</head>
+<body>
+
+<!-- On wide screens, the app is shown in a phone frame; on mobile devices,
+     it fills the viewport. -->
+<div class="stage">
+  <div class="device">
+    <div class="screen">
+
+      <div class="notch"></div>
+      <div class="status">
+        <span>9:41</span>
+        <span class="signal">●●●● &nbsp; 4G &nbsp; 87%</span>
+      </div>
+
+      <!-- =============== HOME =============== -->
+      <section class="route active" data-route="home">
+        <div class="top">
+          <div style="display:flex;gap:10px;align-items:center">
+            <div class="avatar">M</div>
+            <div><div class="greet">Good afternoon</div><div class="who">Ms. Mukisa</div></div>
+          </div>
+          <div class="bell" data-notif="3">
+            <svg viewBox="0 0 24 24" stroke="var(--fg-1)" fill="none" stroke-width="1.75"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
+          </div>
+        </div>
+
+        <div class="body">
+          <!-- Child hero (swipeable in real product) -->
+          <div class="hero">
+            <div class="flag-strip"></div>
+            <div class="hero-pattern"></div>
+            <div class="hero-content">
+              <div class="hero-eyebrow">Timbitwire Girls · Term 2</div>
+              <div class="hero-name">Nakato Aisha</div>
+              <div class="hero-class">S2 East · Green House · Boarding</div>
+              <div class="hero-stats">
+                <div><div class="k">Attendance</div><div class="v">96%</div></div>
+                <div><div class="k">Position</div><div class="v">12 / 78</div></div>
+                <div><div class="k">Clinic</div><div class="v">2 · Term</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dots">
+            <span class="dot on"></span>
+            <span class="dot"></span>
+          </div>
+
+          <h3 class="sec-title underline-brand" style="margin-top:6px">Fees</h3>
+          <div class="balance">
+            <div>
+              <div class="k">Balance · Term 2</div>
+              <div class="amt tabular">UGX 450,000</div>
+              <div class="due">Due 24 Jul · 15 days</div>
+            </div>
+            <button class="pay-btn" data-goto="fees">Pay now
+              <svg viewBox="0 0 24 24" width="14" height="14" stroke="#fff" fill="none" stroke-width="1.75"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+            </button>
+          </div>
+
+          <h3 class="sec-title underline-brand">School</h3>
+          <div class="tiles">
+            <a class="tile" data-goto="academics">
+              <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 9h16"/></svg></div>
+              <div class="t">Marks · Term 2</div>
+              <div class="s">Ready · CAT + midterm</div>
+              <span class="pip"></span>
+            </a>
+            <a class="tile" data-goto="more">
+              <div class="ic n"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><rect x="8" y="8" width="8" height="8"/></svg></div>
+              <div class="t">Feeding menu</div>
+              <div class="s">Today · posho & beans</div>
+            </a>
+            <a class="tile" data-goto="clinic">
+              <div class="ic m"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></svg></div>
+              <div class="t">Clinic history</div>
+              <div class="s">2 visits · this term</div>
+            </a>
+            <a class="tile" data-goto="more">
+              <div class="ic n"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg></div>
+              <div class="t">Events</div>
+              <div class="s">Visitation · 27 Jul</div>
+            </a>
+          </div>
+
+          <h3 class="sec-title underline-brand">Recent</h3>
+          <div class="feed">
+            <div class="fi"><div class="fic ok"><svg viewBox="0 0 24 24"><path d="M5 4v16l3-2 3 2 3-2 3 2V4"/></svg></div><div class="fb"><div class="ft">Receipt R-2026-0891</div><div class="fs">MTN Mobile Money · 09 Jul, 09:12</div></div><div class="famt">+350,000</div></div>
+            <div class="fi"><div class="fic info"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg></div><div class="fb"><div class="ft">Clinic: headache, paracetamol given</div><div class="fs">Nurse Alice N. · 09 Jul, 10:24</div></div></div>
+            <div class="fi"><div class="fic maroon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg></div><div class="fb"><div class="ft">Visitation Day · 27 Jul</div><div class="fs">School hall · 10:00–14:00</div></div></div>
+          </div>
+
+          <div class="foot-space"></div>
+        </div>
+      </section>
+
+
+      <!-- =============== FEES =============== -->
+      <section class="route" data-route="fees">
+        <div class="top-title">
+          <button class="back" data-goto="home"><svg viewBox="0 0 24 24" width="16" height="16" stroke="var(--fg-1)" fill="none" stroke-width="1.75"><path d="m15 18-6-6 6-6"/></svg></button>
+          <h1>Fees</h1>
+          <div class="term-badge">Term 2, 2026</div>
+        </div>
+        <div class="body body-tight">
+          <div class="receipt">
+            <div class="strip"></div>
+            <div class="rc-eyebrow">Statement · Nakato Aisha</div>
+            <div class="rc-title">UGX 450,000 <span>due</span></div>
+            <div class="rc-lines">
+              <div class="rc-line"><span>Tuition</span><span>1,200,000</span></div>
+              <div class="rc-line"><span>Boarding</span><span>450,000</span></div>
+              <div class="rc-line"><span>Lunch programme</span><span>180,000</span></div>
+              <div class="rc-line"><span>Uniforms</span><span>70,000</span></div>
+              <div class="rc-line paid"><span>Paid to date</span><span>−1,450,000</span></div>
+              <div class="rc-line total"><span>Balance</span><span>UGX 450,000</span></div>
+            </div>
+          </div>
+
+          <div class="actions-row">
+            <button class="btn p">
+              <svg viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-width="1.75"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg>
+              Pay now
+            </button>
+            <button class="btn o">
+              <svg viewBox="0 0 24 24" stroke="var(--maroon-600)" fill="none" stroke-width="1.75"><path d="M6 9V3h12v6"/><rect x="6" y="14" width="12" height="7"/><rect x="3" y="9" width="18" height="8" rx="1"/></svg>
+              Print
+            </button>
+          </div>
+
+          <div class="sec-label">Choose a method</div>
+
+          <div class="paymethods">
+            <div class="pm">
+              <div class="pm-logo mtn">MTN</div>
+              <div><div class="pm-name">MTN Mobile Money</div><div class="pm-sub">Dial *165# · school code 402108</div></div>
+              <div class="chev">›</div>
+            </div>
+            <div class="pm">
+              <div class="pm-logo airtel">Airtel</div>
+              <div><div class="pm-name">Airtel Money</div><div class="pm-sub">Merchant code 402108</div></div>
+              <div class="chev">›</div>
+            </div>
+            <div class="pm">
+              <div class="pm-logo bank">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="#fff" fill="none" stroke-width="1.75"><path d="M3 10 12 4l9 6"/><path d="M5 10v9M19 10v9M9 10v9M15 10v9"/><path d="M3 21h18"/></svg>
+              </div>
+              <div><div class="pm-name">Stanbic Bank deposit</div><div class="pm-sub">A/C 9030002187 · TGS Ltd</div></div>
+              <div class="chev">›</div>
+            </div>
+          </div>
+          <div class="foot-space"></div>
+        </div>
+      </section>
+
+
+      <!-- =============== ACADEMICS =============== -->
+      <section class="route" data-route="academics">
+        <div class="top-title">
+          <button class="back" data-goto="home"><svg viewBox="0 0 24 24" width="16" height="16" stroke="var(--fg-1)" fill="none" stroke-width="1.75"><path d="m15 18-6-6 6-6"/></svg></button>
+          <h1>Academics</h1>
+          <div class="term-badge">Term 2, 2026</div>
+        </div>
+        <div class="body">
+          <!-- Report card preview -->
+          <div class="report-card">
+            <div class="strip"></div>
+            <div class="rp-head">
+              <div>
+                <div class="rp-eyebrow">Timbitwire Girls · Term 2 · 2026</div>
+                <div class="rp-title">Report card <span>· Nakato A.</span></div>
+                <div class="rp-sub">S2 East · Green House · Position 12 of 78</div>
+              </div>
+              <div class="rp-stamp">Head-<br>teacher<br>stamp</div>
+            </div>
+            <div class="rp-grades">
+              <div class="rp-h">Subject</div><div class="rp-h">CAT</div><div class="rp-h">Exam</div><div class="rp-h">Grade</div>
+
+              <div class="rp-cell">Mathematics</div><div class="rp-cell num">32/40</div><div class="rp-cell num">54/60</div><div class="rp-cell grade">D1</div>
+              <div class="rp-cell">English</div><div class="rp-cell num">28/40</div><div class="rp-cell num">48/60</div><div class="rp-cell grade">D2</div>
+              <div class="rp-cell">Biology</div><div class="rp-cell num">30/40</div><div class="rp-cell num">50/60</div><div class="rp-cell grade">D1</div>
+              <div class="rp-cell">Chemistry</div><div class="rp-cell num">27/40</div><div class="rp-cell num">44/60</div><div class="rp-cell grade">D2</div>
+              <div class="rp-cell">Physics</div><div class="rp-cell num">25/40</div><div class="rp-cell num">42/60</div><div class="rp-cell grade">D2</div>
+              <div class="rp-cell">History</div><div class="rp-cell num">31/40</div><div class="rp-cell num">51/60</div><div class="rp-cell grade">D1</div>
+              <div class="rp-cell">Kiswahili</div><div class="rp-cell num">29/40</div><div class="rp-cell num">47/60</div><div class="rp-cell grade">D2</div>
+              <div class="rp-cell">CRE</div><div class="rp-cell num">33/40</div><div class="rp-cell num">55/60</div><div class="rp-cell grade">D1</div>
+            </div>
+            <div class="rp-comment">
+              <div class="rp-h" style="border:none;padding:8px 0 4px">Class teacher's comment</div>
+              <p>Aisha is a diligent and self-motivated girl. She should continue to work on the presentation of her Physics practicals. Well done this term.</p>
+              <div class="rp-sign">— Ms. Kabuye R., Class teacher · 09 Jul 2026</div>
+            </div>
+            <div class="actions-row" style="margin-top:14px">
+              <button class="btn p">
+                <svg viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-width="1.75"><path d="M6 9V3h12v6"/><rect x="6" y="14" width="12" height="7"/><rect x="3" y="9" width="18" height="8" rx="1"/></svg>
+                Download PDF
+              </button>
+              <button class="btn o">
+                <svg viewBox="0 0 24 24" stroke="var(--maroon-600)" fill="none" stroke-width="1.75"><path d="M12 5v14M5 12h14"/></svg>
+                Share
+              </button>
+            </div>
+          </div>
+          <div class="foot-space"></div>
+        </div>
+      </section>
+
+
+      <!-- =============== CLINIC =============== -->
+      <section class="route" data-route="clinic">
+        <div class="top-title">
+          <button class="back" data-goto="home"><svg viewBox="0 0 24 24" width="16" height="16" stroke="var(--fg-1)" fill="none" stroke-width="1.75"><path d="m15 18-6-6 6-6"/></svg></button>
+          <h1>Clinic</h1>
+          <div class="term-badge">Nakato A.</div>
+        </div>
+        <div class="body">
+          <div class="stat-row">
+            <div class="stat"><div class="k">Visits · Term</div><div class="v">2</div></div>
+            <div class="stat"><div class="k">Last visit</div><div class="v">Today</div></div>
+            <div class="stat"><div class="k">Follow-up</div><div class="v">24 h</div></div>
+          </div>
+
+          <h3 class="sec-title underline-brand">Recent visits</h3>
+
+          <div class="clinic-card">
+            <div class="cc-head">
+              <div>
+                <div class="cc-diag">Headache · mild fever</div>
+                <div class="cc-when">09 Jul 2026 · 10:24</div>
+              </div>
+              <span class="pip warn">Follow up 24 h</span>
+            </div>
+            <div class="cc-note">Complaining of headache and mild fever. Paracetamol 500 mg administered. Advised rest until lunch. Returned to class after break.</div>
+            <div class="vitals">
+              <div class="vt"><span class="vk">Temp</span><span class="vv">37.9°C</span></div>
+              <div class="vt"><span class="vk">BP</span><span class="vv">108/68</span></div>
+              <div class="vt"><span class="vk">Pulse</span><span class="vv">88</span></div>
+              <div class="vt"><span class="vk">Wt</span><span class="vv">46 kg</span></div>
+            </div>
+            <div class="cc-foot">Recorded by <b>Nurse Alice N.</b></div>
+          </div>
+
+          <div class="clinic-card">
+            <div class="cc-head">
+              <div>
+                <div class="cc-diag">Minor cut · left knee</div>
+                <div class="cc-when">21 Jun 2026 · 14:11</div>
+              </div>
+              <span class="pip ok">Discharged</span>
+            </div>
+            <div class="cc-note">Grazed knee during sports. Cleaned, dressed, and returned to games with plaster. No further action needed.</div>
+            <div class="vitals">
+              <div class="vt"><span class="vk">Temp</span><span class="vv">36.6°C</span></div>
+              <div class="vt"><span class="vk">Wound</span><span class="vv">Superficial</span></div>
+            </div>
+            <div class="cc-foot">Recorded by <b>Nurse Alice N.</b></div>
+          </div>
+
+          <div class="foot-space"></div>
+        </div>
+      </section>
+
+
+      <!-- =============== MORE =============== -->
+      <section class="route" data-route="more">
+        <div class="top-title">
+          <button class="back" data-goto="home"><svg viewBox="0 0 24 24" width="16" height="16" stroke="var(--fg-1)" fill="none" stroke-width="1.75"><path d="m15 18-6-6 6-6"/></svg></button>
+          <h1>More</h1>
+        </div>
+        <div class="body">
+          <!-- Menu card -->
+          <div class="menu-hero">
+            <div class="menu-strip"></div>
+            <div class="menu-eyebrow">Thursday · 09 Jul</div>
+            <div class="menu-title">Today's menu</div>
+            <div class="menu-meals">
+              <div class="mm"><div class="mm-k">Breakfast</div><div class="mm-n">Porridge & bread</div><div class="mm-s">Millet, milk tea</div></div>
+              <div class="mm"><div class="mm-k">Lunch</div><div class="mm-n">Posho & beans</div><div class="mm-s">Steamed cabbage</div></div>
+              <div class="mm"><div class="mm-k">Supper</div><div class="mm-n">Rice & fish stew</div><div class="mm-s">Sukuma wiki, fruit</div></div>
+            </div>
+          </div>
+
+          <h3 class="sec-title underline-brand">Upcoming events</h3>
+          <div class="events-list">
+            <div class="ev-mob">
+              <div class="ev-date"><div class="ev-mo">JUL</div><div class="ev-day">10</div></div>
+              <div class="ev-info"><div class="ev-t">S4 Mock paper 1 · Mathematics</div><div class="ev-s">Main hall · 08:30–11:00</div></div>
+            </div>
+            <div class="ev-mob">
+              <div class="ev-date"><div class="ev-mo">JUL</div><div class="ev-day">12</div></div>
+              <div class="ev-info"><div class="ev-t">Inter-house MDD final</div><div class="ev-s">Assembly hall · 14:00</div></div>
+            </div>
+            <div class="ev-mob highlight">
+              <div class="ev-date"><div class="ev-mo">JUL</div><div class="ev-day">27</div></div>
+              <div class="ev-info"><div class="ev-t">Term 2 Visitation Day</div><div class="ev-s">Boarding parents · 10:00–14:00</div></div>
+            </div>
+            <div class="ev-mob">
+              <div class="ev-date"><div class="ev-mo">JUL</div><div class="ev-day">28</div></div>
+              <div class="ev-info"><div class="ev-t">Report cards released</div><div class="ev-s">Available in app</div></div>
+            </div>
+          </div>
+
+          <h3 class="sec-title underline-brand">Documents</h3>
+          <div class="doc-list">
+            <a class="doc"><svg viewBox="0 0 24 24" stroke="var(--brick-500)" fill="none" stroke-width="1.75"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg><div><div class="d-n">Term 2 fees breakdown</div><div class="d-s">PDF · 340 KB</div></div><span class="chev">›</span></a>
+            <a class="doc"><svg viewBox="0 0 24 24" stroke="var(--brick-500)" fill="none" stroke-width="1.75"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg><div><div class="d-n">School calendar 2026</div><div class="d-s">PDF · 220 KB</div></div><span class="chev">›</span></a>
+            <a class="doc"><svg viewBox="0 0 24 24" stroke="var(--brick-500)" fill="none" stroke-width="1.75"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg><div><div class="d-n">Parent handbook · 2026 ed.</div><div class="d-s">PDF · 1.4 MB</div></div><span class="chev">›</span></a>
+            <a class="doc"><svg viewBox="0 0 24 24" stroke="var(--brick-500)" fill="none" stroke-width="1.75"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg><div><div class="d-n">Safe release · pickup consent</div><div class="d-s">Signed 03 Feb 2024</div></div><span class="chev">›</span></a>
+          </div>
+
+          <h3 class="sec-title underline-brand">Settings</h3>
+          <div class="settings-list">
+            <a class="row-item"><span>Notifications</span><span class="chev">›</span></a>
+            <a class="row-item"><span>Language <span class="cap-hint">English · Luganda</span></span><span class="chev">›</span></a>
+            <a class="row-item"><span>Change PIN</span><span class="chev">›</span></a>
+            <a class="row-item"><span>Sign out</span><span class="chev" style="color:var(--brick-500)">›</span></a>
+          </div>
+
+          <div class="motto-line">Do More To Become More</div>
+
+          <div class="foot-space"></div>
+        </div>
+      </section>
+
+
+      <!-- Bottom tab bar (persistent) -->
+      <nav class="tabs">
+        <a class="tab active" data-goto="home"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.75"><path d="M3 12 12 3l9 9"/><path d="M5 10v10h14V10"/></svg>Home</a>
+        <a class="tab" data-goto="fees"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.75"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg>Fees</a>
+        <a class="tab" data-goto="academics"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.75"><path d="M4 4h16v16H4z"/><path d="M4 9h16"/></svg>Academics</a>
+        <a class="tab" data-goto="clinic"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.75"><path d="M12 3v18M3 12h18"/></svg>Clinic</a>
+        <a class="tab" data-goto="more"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.75"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>More</a>
+      </nav>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// Simple mobile router: toggle .active on <section data-route>. Any element
+// with [data-goto] navigates. Persists via localStorage.
+(function () {
+  const routes = document.querySelectorAll('.route');
+  const tabs = document.querySelectorAll('.tab');
+  function nav(name) {
+    routes.forEach(r => r.classList.toggle('active', r.dataset.route === name));
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.goto === name));
+    document.querySelector('.screen').scrollTop = 0;
+    document.querySelector('.route.active .body')?.scrollTo?.({ top: 0 });
+    localStorage.setItem('tgs_parent_route', name);
+  }
+  document.querySelectorAll('[data-goto]').forEach(el => {
+    el.addEventListener('click', e => { e.preventDefault(); nav(el.dataset.goto); });
+  });
+  const stored = localStorage.getItem('tgs_parent_route');
+  if (stored) nav(stored);
+})();
+</script>
+</body>
+</html>
