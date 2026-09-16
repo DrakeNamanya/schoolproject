@@ -6,13 +6,17 @@ import 'core/auth_provider.dart';
 import 'core/config.dart';
 import 'core/push_service.dart';
 import 'data/mock/mock_parent_repository.dart';
+import 'data/mock/mock_staff_repository.dart';
 import 'data/parent_repository.dart';
+import 'data/staff_repository.dart';
 import 'data/supabase/supabase_parent_repository.dart';
 import 'features/auth/login_screen.dart';
 import 'features/auth/role_picker_screen.dart';
 import 'features/parent/parent_provider.dart';
 import 'features/parent/parent_shell.dart';
 import 'features/placeholder_shell.dart';
+import 'features/staff/staff_provider.dart';
+import 'features/staff/staff_shell.dart';
 import 'models/user.dart';
 import 'theme/app_theme.dart';
 
@@ -42,6 +46,9 @@ class TimbitwireApp extends StatelessWidget {
               ? SupabaseParentRepository(Supabase.instance.client)
               : MockParentRepository(),
         ),
+        // Staff writes go to Supabase in a later phase; the mock keeps the
+        // same shapes so screens do not change.
+        Provider<StaffRepository>(create: (_) => MockStaffRepository()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
       ],
       child: MaterialApp(
@@ -79,7 +86,12 @@ class _Root extends StatelessWidget {
                 ParentProvider(ctx.read<ParentRepository>(), user.id),
             child: const ParentShell(),
           ),
-          AppShell.staff => const PlaceholderShell(shell: AppShell.staff),
+          AppShell.staff => ChangeNotifierProvider(
+            key: ValueKey('staff-${user.id}'),
+            create: (ctx) =>
+                StaffProvider(ctx.read<StaffRepository>(), user.id),
+            child: const StaffShell(),
+          ),
           AppShell.admin => const PlaceholderShell(shell: AppShell.admin),
         };
     }

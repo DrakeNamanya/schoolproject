@@ -5,7 +5,7 @@ One Flutter codebase, three role-based shells, built by **Data Collectors Ltd**.
 | Shell | Users | Status |
 |---|---|---|
 | **Parent** | Guardians | ✅ Phase 1 — Home · Fees · Academics · Clinic · More |
-| **Staff** | Teachers, non-teaching staff | ⏳ Phase 2 — GPS check-in, marks entry, roll call, schedule, timesheet, alerts |
+| **Staff** | Teachers, non-teaching staff | ✅ Phase 2 — GPS geofence check-in · Schedule · Classes (marks entry with 7-day lock, roll call) · Timesheet · Alerts |
 | **Admin** | Director, Bursar, DOS, Nurse, Cook, Registrar, IT | ⏳ Phase 3 — 12 modules, sidebar per sub-role |
 
 **Core principle:** the Parent shell is read-only. Every number a parent sees was written by another role
@@ -30,11 +30,14 @@ lib/
   features/
     auth/      login, role picker
     parent/    provider, shell, 5 screens
-    placeholder_shell.dart   (staff / admin — next phases)
+    staff/     provider (geofence state machine), shell, 5 screens + marks entry + roll call
+    placeholder_shell.dart   (admin — phase 3)
   widgets/     brand widgets (flag strip, crest, section title, pips, cards)
 supabase/
-  migrations/0001_init.sql  tables, views, triggers, RLS policies
+  migrations/0001_init.sql  Phase 1 tables, views, triggers, RLS policies
+  migrations/0002_staff.sql Phase 2: classes, subjects, staff, timetable, geofence, timesheets, alerts, audit
   seed/0001_demo_data.sql   demo data (Nakato Aisha etc.)
+docs/DATA_MODEL.md          every table, PK/FK, relations, write ownership
 design_reference/           original HTML/CSS clickable prototype (the spec)
 ```
 
@@ -72,6 +75,8 @@ flutter run -d chrome
 - Clinic visits readable by guardian, class teacher, nurse, director only
 - Fee status: cleared / partial / arrears (arrears once `terms.fees_due_on` passes)
 - Every payment, clinic visit and report publication fans out a `notices` row to the guardians via trigger
+- Staff GPS sampled only inside the duty window; auto check-in/out on geofence crossing; off-campus during a lesson raises a `staff_alerts` row to DOS/Director
+- Timesheets recomputed from `staff_attendance_events` by trigger; locked once bursar approves
 
 ## Web preview build
 
