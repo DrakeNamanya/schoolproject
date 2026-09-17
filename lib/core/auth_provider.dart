@@ -70,6 +70,24 @@ class AuthProvider extends ChangeNotifier {
       title: 'Nurse',
       roles: [UserRole.nurse],
     ),
+    'dos': AppUser(
+      id: 'demo-dos',
+      fullName: 'Ochieng Lawrence',
+      title: 'Mr.',
+      roles: [UserRole.dos],
+    ),
+    'cook': AppUser(
+      id: 'demo-cook',
+      fullName: 'Nakku Margaret',
+      title: 'Ms.',
+      roles: [UserRole.cook],
+    ),
+    'registrar': AppUser(
+      id: 'demo-registrar',
+      fullName: 'Apio Christine',
+      title: 'Ms.',
+      roles: [UserRole.registrar],
+    ),
     'director': AppUser(
       id: 'demo-director',
       fullName: 'Kato Robert',

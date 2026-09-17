@@ -5,6 +5,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/auth_provider.dart';
 import 'core/config.dart';
 import 'core/push_service.dart';
+import 'data/admin_repository.dart';
+import 'data/mock/mock_admin_repository.dart';
 import 'data/mock/mock_parent_repository.dart';
 import 'data/mock/mock_staff_repository.dart';
 import 'data/parent_repository.dart';
@@ -14,11 +16,12 @@ import 'features/auth/login_screen.dart';
 import 'features/auth/role_picker_screen.dart';
 import 'features/parent/parent_provider.dart';
 import 'features/parent/parent_shell.dart';
-import 'features/placeholder_shell.dart';
+import 'features/admin/admin_shell.dart';
 import 'features/staff/staff_provider.dart';
 import 'features/staff/staff_shell.dart';
 import 'models/user.dart';
 import 'theme/app_theme.dart';
+import 'widgets/phone_frame.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,6 +52,7 @@ class TimbitwireApp extends StatelessWidget {
         // Staff writes go to Supabase in a later phase; the mock keeps the
         // same shapes so screens do not change.
         Provider<StaffRepository>(create: (_) => MockStaffRepository()),
+        Provider<AdminRepository>(create: (_) => MockAdminRepository()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
       ],
       child: MaterialApp(
@@ -79,20 +83,28 @@ class _Root extends StatelessWidget {
         final shell = auth.shell ?? AppShell.parent;
         final user = auth.user!;
         PushService.instance.registerToken(user.id);
+        // Parent + Staff are PHONE apps (framed on wide web screens);
+        // Admin is a WEB console.
         return switch (shell) {
-          AppShell.parent => ChangeNotifierProvider(
-            key: ValueKey('parent-${user.id}'),
-            create: (ctx) =>
-                ParentProvider(ctx.read<ParentRepository>(), user.id),
-            child: const ParentShell(),
+          AppShell.parent => PhoneFrame(
+            label: 'Parent app · mobile',
+            child: ChangeNotifierProvider(
+              key: ValueKey('parent-${user.id}'),
+              create: (ctx) =>
+                  ParentProvider(ctx.read<ParentRepository>(), user.id),
+              child: const ParentShell(),
+            ),
           ),
-          AppShell.staff => ChangeNotifierProvider(
-            key: ValueKey('staff-${user.id}'),
-            create: (ctx) =>
-                StaffProvider(ctx.read<StaffRepository>(), user.id),
-            child: const StaffShell(),
+          AppShell.staff => PhoneFrame(
+            label: 'Staff app · mobile',
+            child: ChangeNotifierProvider(
+              key: ValueKey('staff-${user.id}'),
+              create: (ctx) =>
+                  StaffProvider(ctx.read<StaffRepository>(), user.id),
+              child: const StaffShell(),
+            ),
           ),
-          AppShell.admin => const PlaceholderShell(shell: AppShell.admin),
+          AppShell.admin => AdminShell(key: ValueKey('admin-${user.id}-${auth.activeRole}')),
         };
     }
   }

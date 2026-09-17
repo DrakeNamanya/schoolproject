@@ -6,7 +6,7 @@ One Flutter codebase, three role-based shells, built by **Data Collectors Ltd**.
 |---|---|---|
 | **Parent** | Guardians | ✅ Phase 1 — Home · Fees · Academics · Clinic · More |
 | **Staff** | Teachers, non-teaching staff | ✅ Phase 2 — GPS geofence check-in · Schedule · Classes (marks entry with 7-day lock, roll call) · Timesheet · Alerts |
-| **Admin** | Director, Bursar, DOS, Nurse, Cook, Registrar, IT | ⏳ Phase 3 — 12 modules, sidebar per sub-role |
+| **Admin** | Director, Bursar, DOS, Nurse, Cook, Registrar, IT | ✅ Phase 3 — **web console**, 12 modules, sidebar scoped per sub-role, writes flow to parent app |
 
 **Core principle:** the Parent shell is read-only. Every number a parent sees was written by another role
 (Bursar → fees, Teacher/DOS → marks, Nurse → clinic, Cook → menu, Registrar → students/events).
@@ -31,11 +31,14 @@ lib/
     auth/      login, role picker
     parent/    provider, shell, 5 screens
     staff/     provider (geofence state machine), shell, 5 screens + marks entry + roll call
-    placeholder_shell.dart   (admin — phase 3)
+    admin/     web shell (sidebar, topbar), admin_modules (role → module map), 12 modules
+  widgets/phone_frame.dart   phone bezel for Parent/Staff on wide web viewports
+  data/mock/demo_store.dart  single in-memory store shared by all three shells
   widgets/     brand widgets (flag strip, crest, section title, pips, cards)
 supabase/
   migrations/0001_init.sql  Phase 1 tables, views, triggers, RLS policies
   migrations/0002_staff.sql Phase 2: classes, subjects, staff, timetable, geofence, timesheets, alerts, audit
+  migrations/0003_admin.sql Phase 3: requisitions, purchase orders, stock, issue vouchers, medicine stock, KPI views
   seed/0001_demo_data.sql   demo data (Nakato Aisha etc.)
 docs/DATA_MODEL.md          every table, PK/FK, relations, write ownership
 design_reference/           original HTML/CSS clickable prototype (the spec)
@@ -67,6 +70,18 @@ flutter run -d chrome
 2. Add `--dart-define=ENABLE_PUSH=true`.
 3. Device tokens are stored in `device_tokens`; a Supabase Edge Function (phase 2) fans out
    pushes when a `notices` row is inserted.
+
+## Form factors
+
+- **Parent** and **Staff** are phone apps (bottom tabs, portrait). On wide web viewports they render inside a phone frame.
+- **Admin** is a web app: persistent sidebar ≥ 1024 px, drawer below; modules are scoped to the signed-in sub-role
+  (bursar → Finance/Procurement/Stores; nurse → Clinic; cook → Kitchen; registrar → Students/Events; dos → Academics/Attendance; director → everything).
+
+## Demo the data flow (no backend needed)
+
+1. Sign in as **Bursar** → Finance → *Post payment* for Nakato Aisha.
+2. Sign out, sign in as **Parent** → the receipt is on Home, Fees and in the bell.
+3. Sign in as **Nurse** → *Record a visit*; as **Cook** → edit today's menu; as **DOS** → publish Grace's report card; as **Registrar** → enrol a student. Each shows up in the parent app.
 
 ## Business rules encoded so far
 

@@ -6,6 +6,7 @@ All primary keys are `uuid` (`gen_random_uuid()`) unless stated. All timestamps 
 
 - `0001_init.sql` — Phase 1 (identity, students, fees, academics, clinic, kitchen, events, notices)
 - `0002_staff.sql` — Phase 2 (classes, subjects, staff, timetable, geofence, attendance events, timesheets, staff alerts, audit)
+- `0003_admin.sql` — Phase 3 (requisitions, purchase orders, stock items, issue vouchers, medicine stock, KPI views)
 
 ---
 
@@ -359,7 +360,62 @@ Derived daily summary (one row per staff per day), recomputed by trigger from ev
 
 ---
 
-## 11. Write ownership → what the parent sees
+## 11. Procurement *(0003, written by any staff; status changed by **Bursar → Director**)*
+
+### `requisitions`
+| Column | Type | Key | Notes |
+|---|---|---|---|
+| `id` | uuid | **PK** | |
+| `ref` | text | UNIQUE | REQ-0347 |
+| `title`, `department` | text | | |
+| `requester_id` | uuid | FK → `profiles.id` | |
+| `amount` | bigint | | Σ lines |
+| `status` | `requisition_status` enum | | bursar → director → approved → poRaised → delivered · rejected |
+| `bursar_by`, `director_by` | uuid | FK → `profiles.id` | sign-off trail |
+
+### `requisition_lines` — PK `id`; FK `requisition_id` → requisitions (cascade); qty, unit, unit_price.
+### `purchase_orders` — PK `id`; `po_no` UNIQUE; FK `requisition_id` → requisitions **UNIQUE** (one PO per approved requisition); supplier, amount, `raised_by` FK → profiles.
+
+## 12. Stores *(0003, written by **Bursar** / stores officer)*
+
+### `stock_items` — PK `id`; `sku` UNIQUE; category, unit, `on_hand`, `reorder_at`. Reorder alert when `on_hand < reorder_at`.
+### `issue_vouchers` — PK `id`; `voucher_no` UNIQUE; FK `stock_item_id` → stock_items; qty, issued_to, `issued_by` FK → profiles. **Trigger decrements `stock_items.on_hand`.**
+
+## 13. Clinic stock *(0003, written by **Nurse**)*
+
+### `medicine_stock` — PK `id`; name, batch, expires_on, qty, unit, reorder_at.
+### `medicine_issues` — PK `id`; FK `medicine_id` → medicine_stock; FK `clinic_visit_id` → clinic_visits (set null); qty. **Trigger decrements `medicine_stock.qty`.**
+
+## 14. Views used by the admin console
+
+| View | Feeds | Source tables |
+|---|---|---|
+| `v_me` | login → roles | profiles, user_roles |
+| `v_student_summary` | parent hero card, student profile | attendance, report_cards, clinic_visits |
+| `v_finance_kpis` | Dashboard, Finance KPIs | fee_lines, payments, terms, students |
+| `v_student_fees` | Finance arrears table, Students roster | fee_lines, payments |
+| `v_staff_presence` | Attendance & GPS module, Dashboard "staff on-campus" | staff_profiles, staff_attendance_events |
+
+## 15. Admin console — module → sub-role → tables
+
+| Module | Roles | Reads | Writes |
+|---|---|---|---|
+| Dashboard | director, admin, bursar, dos | v_finance_kpis, v_staff_presence, events, staff_alerts, requisitions | – |
+| Finance | bursar, director | v_finance_kpis, v_student_fees, payments | **payments**, fee_lines |
+| Students | registrar, director, dos, bursar | students, student_guardians, v_student_summary, v_student_fees | **students, student_guardians, profiles** |
+| Academics | dos, director | report_cards, report_card_results, assessments, marks | **report_cards.status → published** |
+| Attendance & GPS | dos, director, bursar | v_staff_presence, staff_attendance_events, geofences | geofences |
+| Clinic | nurse, director | clinic_visits, medicine_stock | **clinic_visits**, medicine_issues |
+| Kitchen | cook, director, bursar | menus, stock_items (Kitchen) | **menus**, requisitions |
+| Events | registrar, director | events | **events** |
+| Procurement | bursar, director, dos | requisitions, purchase_orders | requisitions.status, purchase_orders |
+| Stores | bursar, director | stock_items, issue_vouchers | issue_vouchers |
+| Reports | director, dos, bursar | all read views | – |
+| Audit log | director, admin | audit_log | – |
+
+---
+
+## 16. Write ownership → what the parent sees
 
 | Parent screen element | Table(s) read | Written by | Trigger → `notices`? |
 |---|---|---|---|
@@ -377,7 +433,7 @@ Derived daily summary (one row per staff per day), recomputed by trigger from ev
 | Documents | `documents` | Registrar / Bursar | – |
 | Notification bell | `notices` | System | – |
 
-## 12. Staff shell data flow
+## 17. Staff shell data flow
 
 | Staff screen | Reads | Writes |
 |---|---|---|
