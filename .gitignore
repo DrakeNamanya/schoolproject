@@ -50,3 +50,7 @@ android/key.properties
 android/*.jks
 lib/firebase_options.dart
 .env
+
+# Local secret stores (credentials live in ~/.secrets, never here)
+.secrets/
+*.env
