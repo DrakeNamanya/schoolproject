@@ -178,10 +178,19 @@ create table assessments (
   title          text not null,                 -- CAT 2
   out_of         int  not null,
   assessed_on    date not null,
-  locks_at       timestamptz generated always as ((assessed_on + interval '7 days')::timestamptz) stored,
+  locks_at       timestamptz,                      -- set by trigger: assessed_on + 7 days
   teacher_id     uuid references profiles(id),
   created_at     timestamptz default now()
 );
+
+-- 7-day lock computed on insert/update (generated columns cannot cast date->timestamptz immutably)
+create or replace function set_assessment_lock() returns trigger language plpgsql as $$
+begin
+  new.locks_at := (new.assessed_on + interval '7 days')::timestamptz;
+  return new;
+end $$;
+create trigger assessments_lock before insert or update of assessed_on on assessments
+  for each row execute function set_assessment_lock();
 
 create table marks (
   assessment_id uuid references assessments(id) on delete cascade,
