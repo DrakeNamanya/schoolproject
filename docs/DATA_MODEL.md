@@ -7,6 +7,7 @@ All primary keys are `uuid` (`gen_random_uuid()`) unless stated. All timestamps 
 - `0001_init.sql` — Phase 1 (identity, students, fees, academics, clinic, kitchen, events, notices)
 - `0002_staff.sql` — Phase 2 (classes, subjects, staff, timetable, geofence, attendance events, timesheets, staff alerts, audit)
 - `0003_admin.sql` — Phase 3 (requisitions, purchase orders, stock items, issue vouchers, medicine stock, KPI views)
+- `0004_student_number.sql` — Phase 4 (student-number logins, enrolment invites, RPCs `post_payment`, `enrol_student`, `marks_grid`, `roll_call`, admin views)
 
 ---
 
@@ -175,6 +176,19 @@ Which teacher teaches which subject to which class this term. Drives the "Classe
 | `is_primary` | boolean | | receives SMS |
 
 > **This join table is the security boundary for the whole Parent app.** `is_guardian_of(student_id)` is evaluated in every parent-facing RLS policy.
+
+### `student_logins` *(0004)* — the student number as login
+| Column | Type | Key | Notes |
+|---|---|---|---|
+| `student_id` | uuid | **PK**, FK → `students.id` | one login per student |
+| `login_email` | text | UNIQUE | `tgs-2024-00478@students.timbitwire.demo` (derived from the student number) |
+| `auth_user_id` | uuid | FK → `profiles.id` | the auth account; linked to the student (and siblings) in `student_guardians` |
+| `pin_set_at` | timestamptz | | |
+
+Parents type **student number + PIN**; the app maps the number to `login_email` and signs in with Supabase Auth. RLS then works exactly as for any guardian.
+
+### `guardian_invites` *(0004)*
+Queue written by `enrol_student()`; processed by the provisioning script (service role) which sets the PIN and links the guardian's own profile by phone. PK `id`; FK `student_id` → students; `created_by` → profiles.
 
 ---
 

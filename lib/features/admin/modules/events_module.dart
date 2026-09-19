@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../../core/auth_provider.dart';
 import '../../../core/format.dart';
 import '../../../data/admin_repository.dart';
-import '../../../data/mock/demo_store.dart';
 import '../../../models/school.dart';
 import '../../../theme/tokens.dart';
 import '../../../widgets/brand.dart';
@@ -212,7 +211,7 @@ class _EventDialogState extends State<_EventDialog> {
         onPressed: () {
           if (_title.text.trim().isEmpty) return;
           Navigator.pop(context, SchoolEvent(
-            id: DemoStore.instance.nextId('e'), title: _title.text.trim(),
+            id: '', title: _title.text.trim(),
             startsAt: DateTime(_date.year, _date.month, _date.day, _start.hour, _start.minute),
             venue: _venue.text.trim().isEmpty ? null : _venue.text.trim(), audience: _aud.text.trim().isEmpty ? null : _aud.text.trim(),
             category: _cat, highlight: _highlight,

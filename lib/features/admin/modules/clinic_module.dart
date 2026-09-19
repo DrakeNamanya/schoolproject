@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../../core/auth_provider.dart';
 import '../../../core/format.dart';
 import '../../../data/admin_repository.dart';
-import '../../../data/mock/demo_store.dart';
 import '../../../models/admin.dart';
 import '../../../models/clinic.dart';
 import '../../../models/student.dart';
@@ -24,6 +23,7 @@ class _ClinicModuleState extends State<ClinicModule> {
   List<ClinicVisit> _today = [];
   List<ClinicVisit> _refs = [];
   List<MedicineStock> _meds = [];
+  List<Student> _students = [];
   AdminRepository get _repo => context.read<AdminRepository>();
 
   @override
@@ -36,7 +36,9 @@ class _ClinicModuleState extends State<ClinicModule> {
     final t = await _repo.clinicVisitsToday();
     final r = await _repo.referralsThisTerm();
     final m = await _repo.medicines();
+    final st = await _repo.students();
     if (!mounted) return;
+    _students = st;
     setState(() {
       _today = t;
       _refs = r;
@@ -46,7 +48,6 @@ class _ClinicModuleState extends State<ClinicModule> {
 
   @override
   Widget build(BuildContext context) {
-    final store = DemoStore.instance;
     final observing = _today.where((v) => v.outcome == VisitOutcome.observing).length;
     final low = _meds.where((m) => m.low).toList();
     final wide = MediaQuery.sizeOf(context).width > 1180;
@@ -62,7 +63,7 @@ class _ClinicModuleState extends State<ClinicModule> {
                 ReqRow(
                   icon: Icons.add_rounded,
                   tint: switch (v.outcome) { VisitOutcome.discharged => TgsColors.success, VisitOutcome.observing => TgsColors.warning, VisitOutcome.followUp => TgsColors.navy500, VisitOutcome.referred => TgsColors.brick600 },
-                  title: '${_name(store, v.studentId)} · ${_cls(store, v.studentId)}',
+                  title: '${_name(v.studentId)} · ${_cls(v.studentId)}',
                   sub: '${v.complaint}${v.treatment == null ? '' : ' · ${v.treatment}'}',
                   trailing: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
                     Num(Fmt.time(v.visitedAt)),
@@ -84,7 +85,7 @@ class _ClinicModuleState extends State<ClinicModule> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Column(children: [
         for (final v in _refs)
-          ReqRow(icon: Icons.local_hospital_outlined, tint: TgsColors.navy500, title: v.referralFacility ?? 'Referral', sub: '${_name(store, v.studentId)} · ${_cls(store, v.studentId)} · ${Fmt.dayMonthYear(v.visitedAt)}', trailing: const StatusTag('In progress', tone: PipTone.warn)),
+          ReqRow(icon: Icons.local_hospital_outlined, tint: TgsColors.navy500, title: v.referralFacility ?? 'Referral', sub: '${_name(v.studentId)} · ${_cls(v.studentId)} · ${Fmt.dayMonthYear(v.visitedAt)}', trailing: const StatusTag('In progress', tone: PipTone.warn)),
         if (_refs.isEmpty) const Padding(padding: EdgeInsets.all(12), child: Text('No referrals this term.', style: TextStyle(fontSize: 12, color: TgsColors.fg3))),
       ]),
     );
@@ -116,17 +117,17 @@ class _ClinicModuleState extends State<ClinicModule> {
     ]);
   }
 
-  String _name(DemoStore s, String id) => s.students.where((x) => x.id == id).map((x) => x.fullName).firstOrNull ?? id;
-  String _cls(DemoStore s, String id) => s.students.where((x) => x.id == id).map((x) => x.className).firstOrNull ?? '';
+  String _name(String id) => _students.where((x) => x.id == id).map((x) => x.fullName).firstOrNull ?? id;
+  String _cls(String id) => _students.where((x) => x.id == id).map((x) => x.className).firstOrNull ?? '';
 
   Future<void> _record() async {
-    final students = await _repo.students();
+    final students = _students.isEmpty ? await _repo.students() : _students;
     if (!mounted) return;
     final v = await showDialog<ClinicVisit>(context: context, builder: (_) => _VisitDialog(students: students, nurse: context.read<AuthProvider>().user!.displayName));
     if (v == null || !mounted) return;
     await _repo.recordVisit(v, byName: context.read<AuthProvider>().user!.fullName);
     if (!mounted) return;
-    toast(context, 'Visit recorded for ${_name(DemoStore.instance, v.studentId)} · guardian notified');
+    toast(context, 'Visit recorded for ${_name(v.studentId)} · guardian notified');
     _load();
   }
 }
@@ -197,7 +198,7 @@ class _VisitDialogState extends State<_VisitDialog> {
             if (_wt.text.isNotEmpty) Vital('Wt', '${_wt.text} kg'),
           ];
           Navigator.pop(context, ClinicVisit(
-            id: DemoStore.instance.nextId('cv'), studentId: _s!.id, visitedAt: DateTime.now(),
+            id: '', studentId: _s!.id, visitedAt: DateTime.now(),
             complaint: _complaint.text.trim(), notes: _notes.text.trim(), treatment: _treat.text.trim().isEmpty ? null : _treat.text.trim(),
             vitals: vitals, outcome: _out, followUpNote: _out == VisitOutcome.followUp && _follow.text.isNotEmpty ? _follow.text.trim() : null,
             referralFacility: _out == VisitOutcome.referred ? _facility.text.trim() : null, recordedBy: widget.nurse,

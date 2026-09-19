@@ -11,7 +11,9 @@ import 'data/mock/mock_parent_repository.dart';
 import 'data/mock/mock_staff_repository.dart';
 import 'data/parent_repository.dart';
 import 'data/staff_repository.dart';
+import 'data/supabase/supabase_admin_repository.dart';
 import 'data/supabase/supabase_parent_repository.dart';
+import 'data/supabase/supabase_staff_repository.dart';
 import 'features/auth/login_screen.dart';
 import 'features/auth/role_picker_screen.dart';
 import 'features/parent/parent_provider.dart';
@@ -49,10 +51,16 @@ class TimbitwireApp extends StatelessWidget {
               ? SupabaseParentRepository(Supabase.instance.client)
               : MockParentRepository(),
         ),
-        // Staff writes go to Supabase in a later phase; the mock keeps the
-        // same shapes so screens do not change.
-        Provider<StaffRepository>(create: (_) => MockStaffRepository()),
-        Provider<AdminRepository>(create: (_) => MockAdminRepository()),
+        Provider<StaffRepository>(
+          create: (_) => AppConfig.hasSupabase
+              ? SupabaseStaffRepository(Supabase.instance.client)
+              : MockStaffRepository(),
+        ),
+        Provider<AdminRepository>(
+          create: (_) => AppConfig.hasSupabase
+              ? SupabaseAdminRepository(Supabase.instance.client)
+              : MockAdminRepository(),
+        ),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
       ],
       child: MaterialApp(

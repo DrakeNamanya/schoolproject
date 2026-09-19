@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../core/auth_provider.dart';
 import '../../../core/format.dart';
 import '../../../data/admin_repository.dart';
-import '../../../data/mock/demo_store.dart';
+import '../../../models/student.dart';
 import '../../../models/academics.dart';
 import '../../../theme/tokens.dart';
 import '../../../widgets/brand.dart';
@@ -20,6 +20,7 @@ class AcademicsModule extends StatefulWidget {
 
 class _AcademicsModuleState extends State<AcademicsModule> {
   List<ReportCard> _rcs = [];
+  List<Student> _students = [];
   ReportCard? _sel;
   AdminRepository get _repo => context.read<AdminRepository>();
 
@@ -31,7 +32,9 @@ class _AcademicsModuleState extends State<AcademicsModule> {
 
   Future<void> _load() async {
     final r = await _repo.reportCards();
+    final st = await _repo.students();
     if (!mounted) return;
+    _students = st;
     setState(() {
       _rcs = r;
       _sel = _sel == null ? r.firstWhere((x) => !x.isPublished, orElse: () => r.first) : r.firstWhere((x) => x.id == _sel!.id, orElse: () => r.first);
@@ -40,7 +43,6 @@ class _AcademicsModuleState extends State<AcademicsModule> {
 
   @override
   Widget build(BuildContext context) {
-    final store = DemoStore.instance;
     final review = _rcs.where((r) => r.status == ReportStatus.review).length;
     final published = _rcs.where((r) => r.isPublished).length;
 
@@ -76,7 +78,7 @@ class _AcademicsModuleState extends State<AcademicsModule> {
             rows: [
               for (final r in _rcs)
                 [
-                  InkWell(onTap: () => setState(() => _sel = r), child: PersonCell(_name(store, r.studentId), _adm(store, r.studentId), color: r.id == _sel?.id ? TgsColors.maroon500 : TgsColors.brick500)),
+                  InkWell(onTap: () => setState(() => _sel = r), child: PersonCell(_name(r.studentId), _adm(r.studentId), color: r.id == _sel?.id ? TgsColors.maroon500 : TgsColors.brick500)),
                   Cell(r.className),
                   Num(r.position == null ? '—' : '${r.position} / ${r.classSize}'),
                   StatusTag(switch (r.status) { ReportStatus.draft => 'Draft', ReportStatus.review => 'In review', ReportStatus.published => 'Published' }, tone: switch (r.status) { ReportStatus.draft => PipTone.neutral, ReportStatus.review => PipTone.warn, ReportStatus.published => PipTone.ok }),
@@ -90,20 +92,20 @@ class _AcademicsModuleState extends State<AcademicsModule> {
             ],
           ),
         ),
-        right: _sel == null ? const SizedBox.shrink() : _Preview(_sel!, _name(store, _sel!.studentId), onPublish: _sel!.isPublished ? null : () => _publish(_sel!)),
+        right: _sel == null ? const SizedBox.shrink() : _Preview(_sel!, _name(_sel!.studentId), onPublish: _sel!.isPublished ? null : () => _publish(_sel!)),
       ),
     ]);
   }
 
-  String _name(DemoStore s, String id) => s.students.where((x) => x.id == id).map((x) => x.fullName).firstOrNull ?? id;
-  String _adm(DemoStore s, String id) => s.students.where((x) => x.id == id).map((x) => x.admissionNo).firstOrNull ?? '';
+  String _name(String id) => _students.where((x) => x.id == id).map((x) => x.fullName).firstOrNull ?? id;
+  String _adm(String id) => _students.where((x) => x.id == id).map((x) => x.admissionNo).firstOrNull ?? '';
 
   Future<void> _publish(ReportCard r) async {
     final ok = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Publish report card?'),
-        content: Text('${_name(DemoStore.instance, r.studentId)} · ${r.termLabel}\n\nThe guardian will be notified immediately and can view and download it from the parent app. Marks become read-only.'),
+        content: Text('${_name(r.studentId)} · ${r.termLabel}\n\nThe guardian will be notified immediately and can view and download it from the parent app. Marks become read-only.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
           FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('Publish')),
@@ -113,7 +115,7 @@ class _AcademicsModuleState extends State<AcademicsModule> {
     if (ok != true || !mounted) return;
     await _repo.publishReport(r.id, byName: context.read<AuthProvider>().user!.fullName);
     if (!mounted) return;
-    toast(context, 'Report card published · guardian of ${_name(DemoStore.instance, r.studentId)} notified');
+    toast(context, 'Report card published · guardian of ${_name(r.studentId)} notified');
     _load();
   }
 

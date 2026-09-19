@@ -17,6 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _id = TextEditingController();
   final _pw = TextEditingController();
   bool _hide = true;
+  bool _staffMode = false;
 
   @override
   void dispose() {
@@ -75,9 +76,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(fontFamily: TgsFonts.display, fontSize: 34, color: Colors.white, height: 1),
                   ),
                   const SizedBox(height: 6),
-                  const Text(
-                    'Sign in with the phone number or email registered with the school.',
-                    style: TextStyle(fontSize: 13, color: Colors.white70),
+                  Text(
+                    _staffMode
+                        ? 'Staff: sign in with your school email or phone number.'
+                        : "Parents: enter your daughter's student number and your PIN.",
+                    style: const TextStyle(fontSize: 13, color: Colors.white70),
                   ),
                   const SizedBox(height: 28),
 
@@ -88,23 +91,32 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        Row(children: [
+                          Expanded(child: _ModeChip('Parent', !_staffMode, () => setState(() => _staffMode = false))),
+                          const SizedBox(width: 8),
+                          Expanded(child: _ModeChip('Staff', _staffMode, () => setState(() => _staffMode = true))),
+                        ]),
+                        const SizedBox(height: 14),
                         TextField(
                           controller: _id,
-                          keyboardType: TextInputType.emailAddress,
+                          keyboardType: _staffMode ? TextInputType.emailAddress : TextInputType.text,
+                          textCapitalization: _staffMode ? TextCapitalization.none : TextCapitalization.characters,
                           autofillHints: const [AutofillHints.username],
-                          decoration: const InputDecoration(
-                            labelText: 'Phone or email',
-                            prefixIcon: Icon(Icons.person_outline_rounded),
+                          decoration: InputDecoration(
+                            labelText: _staffMode ? 'Phone or email' : 'Student number',
+                            hintText: _staffMode ? null : 'TGS/2024/00478',
+                            prefixIcon: Icon(_staffMode ? Icons.person_outline_rounded : Icons.badge_outlined),
                           ),
                         ),
                         const SizedBox(height: 12),
                         TextField(
                           controller: _pw,
                           obscureText: _hide,
+                          keyboardType: _staffMode ? TextInputType.text : TextInputType.number,
                           autofillHints: const [AutofillHints.password],
                           onSubmitted: (_) => _submit(auth),
                           decoration: InputDecoration(
-                            labelText: 'Password / PIN',
+                            labelText: _staffMode ? 'Password' : 'PIN',
                             prefixIcon: const Icon(Icons.lock_outline_rounded),
                             suffixIcon: IconButton(
                               icon: Icon(_hide ? Icons.visibility_outlined : Icons.visibility_off_outlined),
@@ -134,6 +146,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
 
+                  if (!auth.isDemo) ...[
+                    const SizedBox(height: 18),
+                    TgsCard(
+                      color: Colors.white.withValues(alpha: .85),
+                      padding: const EdgeInsets.all(14),
+                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: const [
+                        Eyebrow('Test accounts · live database'),
+                        SizedBox(height: 8),
+                        _Hint('Parent', 'TGS/2024/00478  ·  PIN 123456', '(Nakato Aisha — sibling Grace also linked)'),
+                        _Hint('Teacher', 'teacher@timbitwire.demo', 'Timbitwire2026!'),
+                        _Hint('Bursar', 'bursar@timbitwire.demo', 'Timbitwire2026!'),
+                        _Hint('Nurse · DOS · Cook · Registrar · Director', 'nurse@ · dos@ · cook@ · registrar@ · director@timbitwire.demo', 'Timbitwire2026!'),
+                      ]),
+                    ),
+                  ],
                   if (auth.isDemo) ...[
                     const SizedBox(height: 24),
                     const Eyebrow('Demo accounts · no backend configured'),
@@ -169,4 +196,39 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _submit(AuthProvider auth) => auth.signInWithPassword(_id.text, _pw.text);
+}
+
+class _ModeChip extends StatelessWidget {
+  const _ModeChip(this.label, this.on, this.onTap);
+  final String label;
+  final bool on;
+  final VoidCallback onTap;
+  @override
+  Widget build(BuildContext context) => GestureDetector(
+    onTap: onTap,
+    child: AnimatedContainer(
+      duration: const Duration(milliseconds: 150),
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: on ? TgsColors.brick500 : TgsColors.paper,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: on ? TgsColors.brick500 : TgsColors.border1),
+      ),
+      child: Text(label, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: on ? Colors.white : TgsColors.fg2)),
+    ),
+  );
+}
+
+class _Hint extends StatelessWidget {
+  const _Hint(this.role, this.id, this.pw);
+  final String role, id, pw;
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(bottom: 6),
+    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text(role, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700)),
+      Text('$id  ·  $pw', style: const TextStyle(fontFamily: TgsFonts.mono, fontSize: 10.5, color: TgsColors.fg2)),
+    ]),
+  );
 }

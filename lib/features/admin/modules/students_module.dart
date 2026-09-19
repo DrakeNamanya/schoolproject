@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../../core/auth_provider.dart';
 import '../../../core/format.dart';
 import '../../../data/admin_repository.dart';
-import '../../../data/mock/demo_store.dart';
 import '../../../models/fees.dart';
 import '../../../models/student.dart';
 import '../../../theme/tokens.dart';
@@ -21,6 +20,9 @@ class StudentsModule extends StatefulWidget {
 
 class _StudentsModuleState extends State<StudentsModule> {
   List<Student> _all = [];
+  final Map<String, FeeStatus> _fee = {};
+  final Map<String, int> _bal = {};
+  final Map<String, StudentSummary> _sum = {};
   Student? _sel;
   int _tab = 0;
   AdminRepository get _repo => context.read<AdminRepository>();
@@ -33,6 +35,11 @@ class _StudentsModuleState extends State<StudentsModule> {
 
   Future<void> _load() async {
     final s = await _repo.students();
+    for (final x in s) {
+      _fee[x.id] = await _repo.feeStatus(x.id);
+      _bal[x.id] = await _repo.balance(x.id);
+      _sum[x.id] = await _repo.summary(x.id);
+    }
     if (!mounted) return;
     setState(() {
       _all = s;
@@ -42,7 +49,6 @@ class _StudentsModuleState extends State<StudentsModule> {
 
   @override
   Widget build(BuildContext context) {
-    final store = DemoStore.instance;
     final levels = ['All', 'S1', 'S2', 'S3', 'S4', 'S5', 'S6'];
     final filtered = _tab == 0 ? _all : _all.where((s) => s.className.startsWith(levels[_tab])).toList();
     final boarders = _all.where((s) => s.isBoarder).length;
@@ -86,13 +92,13 @@ class _StudentsModuleState extends State<StudentsModule> {
                     Cell(s.className),
                     Cell(s.house),
                     Cell(s.isBoarder ? 'Boarder' : 'Day'),
-                    _feeTag(store.feeStatusFor(s.id)),
+                    _feeTag(_fee[s.id] ?? FeeStatus.partial),
                   ],
               ],
             ),
           ]),
         ),
-        right: _sel == null ? const SizedBox.shrink() : _Profile(_sel!, key: ValueKey(_sel!.id)),
+        right: _sel == null ? const SizedBox.shrink() : _Profile(_sel!, _sum[_sel!.id], _bal[_sel!.id] ?? 0, key: ValueKey(_sel!.id)),
       ),
     ]);
   }
@@ -107,26 +113,22 @@ class _StudentsModuleState extends State<StudentsModule> {
     final r = await showDialog<_EnrolResult>(context: context, builder: (_) => const _EnrolDialog());
     if (r == null || !mounted) return;
     final by = context.read<AuthProvider>().user!.fullName;
-    final id = DemoStore.instance.nextId('stu');
-    final adm = 'TGS/2026/${(700 + _all.length).toString().padLeft(5, '0')}';
-    final s = Student(id: id, admissionNo: adm, firstName: r.first, surname: r.surname, className: r.className, house: r.house, isBoarder: r.boarder, dormitory: r.boarder ? 'To be assigned' : null, admittedOn: DateTime.now());
+    final s = Student(id: '', admissionNo: '', firstName: r.first, surname: r.surname, className: r.className, house: r.house, isBoarder: r.boarder, dormitory: r.boarder ? 'To be assigned' : null, admittedOn: DateTime.now());
     await _repo.enrolStudent(s, guardianName: r.guardian, guardianPhone: r.phone, byName: by);
     if (!mounted) return;
-    toast(context, '${s.fullName} enrolled as $adm · guardian ${r.guardian} linked · Term 2 invoice raised');
-    _sel = s;
+    toast(context, '${s.fullName} enrolled · student number issued · guardian ${r.guardian} linked · Term 2 invoice raised');
     _load();
   }
 }
 
 class _Profile extends StatelessWidget {
-  const _Profile(this.s, {super.key});
+  const _Profile(this.s, this.sum, this.bal, {super.key});
   final Student s;
+  final StudentSummary? sum;
+  final int bal;
   @override
   Widget build(BuildContext context) {
-    final store = DemoStore.instance;
-    final sum = store.summaries[s.id];
-    final bal = store.balanceFor(s.id);
-    final visits = store.clinicVisits.where((v) => v.studentId == s.id).length;
+    final visits = sum?.clinicVisitsThisTerm ?? 0;
     return TgsCard(
       padding: EdgeInsets.zero,
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [

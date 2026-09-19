@@ -3,7 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../../../core/format.dart';
 import '../../../data/admin_repository.dart';
-import '../../../data/mock/demo_store.dart';
+import '../../../models/clinic.dart';
+import '../../../models/student.dart';
 import '../../../models/admin.dart';
 import '../../../models/school.dart';
 import '../../../theme/tokens.dart';
@@ -22,6 +23,9 @@ class _DashboardModuleState extends State<DashboardModule> {
   List<StaffPresence> _staff = [];
   List<Requisition> _reqs = [];
   List<SchoolEvent> _events = [];
+  List<Student> _students = [];
+  List<ClinicVisit> _visitsToday = [];
+  List<StockItem> _stock = [];
 
   @override
   void initState() {
@@ -35,7 +39,13 @@ class _DashboardModuleState extends State<DashboardModule> {
     final s = await r.staffPresence();
     final q = await r.requisitions();
     final e = await r.events();
+    final st = await r.students();
+    final cv = await r.clinicVisitsToday();
+    final sk = await r.stock();
     if (!mounted) return;
+    _students = st;
+    _visitsToday = cv;
+    _stock = sk;
     setState(() {
       _k = k;
       _staff = s;
@@ -48,13 +58,12 @@ class _DashboardModuleState extends State<DashboardModule> {
   Widget build(BuildContext context) {
     final k = _k;
     if (k == null) return const Center(child: Padding(padding: EdgeInsets.all(48), child: CircularProgressIndicator()));
-    final store = DemoStore.instance;
     final inside = _staff.where((s) => s.status == PresenceStatus.inside).length;
     final onDuty = _staff.where((s) => s.status != PresenceStatus.offDuty).length;
     final off = _staff.where((s) => s.status == PresenceStatus.outside).toList();
     final today = DateTime.now();
-    final visitsToday = store.clinicVisits.where((v) => v.visitedAt.day == today.day && v.visitedAt.month == today.month).length;
-    final lowStock = store.stockItems.where((s) => s.needsReorder).toList();
+    final visitsToday = _visitsToday.length;
+    final lowStock = _stock.where((s) => s.needsReorder).toList();
     final approved = _reqs.where((r) => r.status == RequisitionStatus.approved).toList();
 
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
@@ -69,7 +78,7 @@ class _DashboardModuleState extends State<DashboardModule> {
         ],
       ),
       KpiGrid([
-        Kpi(label: 'Enrolment', value: '${store.students.length}', unit: 'learners', trend: '+${store.students.length - 10} this term', trendUp: true),
+        Kpi(label: 'Enrolment', value: '${_students.length}', unit: 'learners', trend: '+${(_students.length - 10).clamp(0, 999)} this term', trendUp: true),
         Kpi(label: 'Fees collected', value: _m(k.collected), unit: 'of ${_m(k.invoiced)}', progress: k.pct, footLeft: '${(k.pct * 100).round()}% · Term 2', footRight: 'Target 24 Jul'),
         Kpi(label: 'Staff on-campus', value: '$inside', unit: '/ $onDuty', progress: onDuty == 0 ? 0 : inside / onDuty, progressColor: TgsColors.navy500, footLeft: '${onDuty == 0 ? 0 : inside * 100 ~/ onDuty}% checked in', footRight: '${_staff.length - onDuty} off duty'),
         Kpi(label: 'Clinic visits today', value: '$visitsToday', trend: 'vs yesterday', trendUp: false),

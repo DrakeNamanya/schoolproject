@@ -11,6 +11,21 @@ One Flutter codebase, three role-based shells, built by **Data Collectors Ltd**.
 **Core principle:** the Parent shell is read-only. Every number a parent sees was written by another role
 (Bursar → fees, Teacher/DOS → marks, Nurse → clinic, Cook → menu, Registrar → students/events).
 
+## The student number is the key
+
+`students.admission_no` (e.g. **TGS/2024/00478**) is the one identifier everybody uses:
+
+| Who | What they type the student number for |
+|---|---|
+| **Parent** | **Logs in** with student number + 6-digit PIN → sees that student and her siblings |
+| Bursar | Post payment (`post_payment(student_no, …)` RPC) |
+| Nurse | Record clinic visit |
+| Teacher | Marks grid / roll call rows show it |
+| Registrar | Issued automatically on enrolment (`enrol_student` RPC → `TGS/YYYY/NNNNN`) |
+
+Internally Postgres keeps a uuid for foreign keys; the number is `UNIQUE NOT NULL` and never changes.
+Each student has an internal auth account `<slug>@students.timbitwire.demo`; `scripts/provision_student_logins.py` creates them and processes registrar enrolment invites.
+
 ## Stack
 
 - **Flutter 3.35 / Dart 3.9**, Provider, Material 3 with the Timbitwire design tokens
@@ -39,6 +54,7 @@ supabase/
   migrations/0001_init.sql  Phase 1 tables, views, triggers, RLS policies
   migrations/0002_staff.sql Phase 2: classes, subjects, staff, timetable, geofence, timesheets, alerts, audit
   migrations/0003_admin.sql Phase 3: requisitions, purchase orders, stock, issue vouchers, medicine stock, KPI views
+  migrations/0004_student_number.sql  student logins, enrolment invites, post_payment/enrol_student RPCs, admin views
   seed/0001_demo_data.sql   demo data (Nakato Aisha etc.)
 docs/DATA_MODEL.md          every table, PK/FK, relations, write ownership
 design_reference/           original HTML/CSS clickable prototype (the spec)
@@ -46,7 +62,9 @@ design_reference/           original HTML/CSS clickable prototype (the spec)
 
 ## Running
 
-**Demo mode (no backend)** — default. Uses seeded in-memory data and demo accounts.
+**Live (Supabase)** — `scripts/run_web.sh`, `scripts/build_web.sh`, `scripts/build_apk.sh` read credentials from `~/.secrets/supabase.env`.
+
+**Demo mode (no backend)** — build without `--dart-define`s. Uses seeded in-memory data and demo chips.
 
 ```bash
 flutter pub get
@@ -82,6 +100,33 @@ flutter run -d chrome
 1. Sign in as **Bursar** → Finance → *Post payment* for Nakato Aisha.
 2. Sign out, sign in as **Parent** → the receipt is on Home, Fees and in the bell.
 3. Sign in as **Nurse** → *Record a visit*; as **Cook** → edit today's menu; as **DOS** → publish Grace's report card; as **Registrar** → enrol a student. Each shows up in the parent app.
+
+## Test accounts (live database)
+
+| Role | Login | Password / PIN |
+|---|---|---|
+| Parent | `TGS/2024/00478` (any student number) | `123456` |
+| Teacher | `teacher@timbitwire.demo` | `Timbitwire2026!` |
+| Bursar · Nurse · DOS · Cook · Registrar · Director | `bursar@` `nurse@` `dos@` `cook@` `registrar@` `director@timbitwire.demo` | `Timbitwire2026!` |
+
+## Deploy to Netlify
+
+1. Netlify → **Add new site → Import from Git** → this repo.
+2. Build settings are read from `netlify.toml` (command `bash netlify/build.sh`, publish `build/web`).
+3. **Site settings → Environment variables** add `SUPABASE_URL` and `SUPABASE_ANON_KEY` (the anon JWT — never the secret/service key).
+4. Deploy. First build ~6 min (clones Flutter 3.35.4); later builds are cached.
+5. Supabase → Authentication → URL Configuration: add the Netlify URL to **Redirect URLs**.
+
+## Provisioning / ops scripts
+
+```bash
+scripts/db.py supabase/migrations/000N_*.sql   # apply a migration
+scripts/db.py --query "select …"               # ad-hoc SQL
+scripts/seed_users.py                          # demo staff/guardian auth users
+scripts/seed_data.py                           # demo rows (wipes & reseeds)
+scripts/provision_student_logins.py            # student-number logins + pending enrolment invites
+scripts/smoke_test.py                          # 30 RLS checks with the anon key
+```
 
 ## Business rules encoded so far
 

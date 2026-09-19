@@ -122,8 +122,17 @@ class AuthProvider extends ChangeNotifier {
     _error = null;
     notifyListeners();
     try {
-      final isPhone = RegExp(r'^\+?\d{9,15}$').hasMatch(identifier.trim());
-      if (isPhone) {
+      final id = identifier.trim();
+      final isPhone = RegExp(r'^\+?\d{9,15}$').hasMatch(id);
+      final isStudentNo = studentNoPattern.hasMatch(id);
+      if (isStudentNo) {
+        // Parents sign in with the STUDENT NUMBER + PIN. Each student has an
+        // internal login account: <slug>@students.<domain>
+        await _client!.auth.signInWithPassword(
+          email: studentLoginEmail(id),
+          password: password,
+        );
+      } else if (isPhone) {
         await _client!.auth.signInWithPassword(
           phone: _normalisePhone(identifier),
           password: password,
@@ -136,7 +145,9 @@ class AuthProvider extends ChangeNotifier {
       }
       await _refresh();
     } on sb.AuthException catch (e) {
-      _error = e.message;
+      _error = e.message.toLowerCase().contains('invalid')
+          ? 'Student number or PIN not recognised.'
+          : e.message;
     } catch (e) {
       _error = 'Could not sign in. Check your connection and try again.';
       if (kDebugMode) debugPrint('signIn error: $e');
@@ -193,6 +204,21 @@ class AuthProvider extends ChangeNotifier {
     _status = AuthStatus.signedOut;
     notifyListeners();
   }
+
+  /// TGS/2024/00478 · tgs-2024-00478 · TGS 2024 00478 · 2024/00478
+  static final studentNoPattern = RegExp(r'^(TGS[\s/\-]*)?\d{4}[\s/\-]*\d{3,6}$', caseSensitive: false);
+
+  static const studentLoginDomain = 'students.timbitwire.demo';
+
+  /// Normalise any accepted spelling to TGS/YYYY/NNNNN then slug it.
+  static String normaliseStudentNo(String raw) {
+    final digits = RegExp(r'\d+').allMatches(raw).map((m) => m.group(0)!).toList();
+    if (digits.length < 2) return raw.trim().toUpperCase();
+    return 'TGS/${digits[0]}/${digits[1].padLeft(5, '0')}';
+  }
+
+  static String studentLoginEmail(String raw) =>
+      '${normaliseStudentNo(raw).toLowerCase().replaceAll(RegExp(r'[^a-z0-9]+'), '-')}@$studentLoginDomain';
 
   static String _normalisePhone(String raw) {
     var p = raw.replaceAll(RegExp(r'[\s\-()]'), '');

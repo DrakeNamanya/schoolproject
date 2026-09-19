@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../../../core/auth_provider.dart';
 import '../../../core/format.dart';
 import '../../../data/admin_repository.dart';
-import '../../../data/mock/demo_store.dart';
 import '../../../models/admin.dart';
 import '../../../models/fees.dart';
 import '../../../models/student.dart';
@@ -41,6 +40,7 @@ class _FinanceModuleState extends State<FinanceModule> {
   Future<void> _load() async {
     final k = await _repo.financeKpis();
     final st = await _repo.students();
+    _daysToDue = 15; // TODO read terms.fees_due_on via repo
     for (final s in st) {
       _bal[s.id] = await _repo.balance(s.id);
       _st[s.id] = await _repo.feeStatus(s.id);
@@ -170,7 +170,7 @@ class _FinanceModuleState extends State<FinanceModule> {
     );
   }
 
-  int get _daysToDue => DemoStore.instance.currentTerm.feesDueOn?.difference(DateTime.now()).inDays ?? 0;
+  int _daysToDue = 15;
 
   String _name(String id) => _students.where((s) => s.id == id).map((s) => s.fullName).firstOrNull ?? id;
   static String _m(int v) => v >= 1000000 ? 'UGX ${(v / 1000000).toStringAsFixed(v % 1000000 == 0 ? 0 : 1)}M' : Fmt.ugx(v);
